@@ -244,3 +244,28 @@ DiTreDi(
 ```
 
 ![PointPlane3D](test/paint/golden/point_plane_3d/bold.png)
+
+## Transformations
+
+Each figure could be transformed to points or lines (wireframe).
+
+```dart
+DiTreDi(
+    figures: [
+      ...Plane3D(5, Axis3D.z, false, Vector3(0, 0, 0)).toPoints(),
+    ],
+)
+```
+
+![Points](test/paint/golden/plane_3d/points.png)
+
+
+```dart
+DiTreDi(
+    figures: [
+      ...Plane3D(5, Axis3D.z, false, Vector3(0, 0, 0)).toLines(),
+    ],
+)
+```
+
+![Lines](test/paint/golden/plane_3d/lines.png)
