@@ -70,7 +70,7 @@ pages:
     FF_USE_FASTZIP: "true"
     ARTIFACT_COMPRESSION_LEVEL: "fastest"
   dependencies:
-    - build:app
+    - build:example
   script:
     - mv "$CI_PROJECT_DIR/example/build/web" "$CI_PROJECT_DIR/public"
     - find public -type f -regex '.*\.\(htm\|html\|txt\|text\|js\|css\)$' -exec gzip -f -k {} \;
