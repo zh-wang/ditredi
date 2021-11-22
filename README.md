@@ -3,6 +3,8 @@ DiTreDi
 
 A flutter package that displays large 3D datasets on transparent canvas.
 
+Live web example: https://jelenski.gitlab.io/ditredi/
+
 ## Preface
 
 DiTreDi was created to efficiently display datasets and meshes in 3D space. It wasn't intended to create a 3D game engine and is rather useful for displaying static meshes.
@@ -256,9 +258,6 @@ DiTreDi(
     ],
 )
 ```
-
-![Points](test/paint/golden/plane_3d/points.png)
-
 
 ```dart
 DiTreDi(
