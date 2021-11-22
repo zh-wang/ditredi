@@ -64,6 +64,18 @@ controller.update(rotationY: 30, rotationX: 30);
 
 ![Cube3D](test/paint/golden/cube/rotated.png)
 
+To handle input gestures use `GestureDetector` or `DiTreDiDraggable`:
+
+```dart
+DiTreDiDraggable(
+    controller: controller,
+    child: DiTreDi(
+        figures: [Cube3D(1, vector.Vector3(0, 0, 0))],
+        controller: controller,
+    ),
+);
+```
+
 ## Config
 
 `DiTreDiConfig` defines component "defaults" - mesh color, lines and points width (if not specified).

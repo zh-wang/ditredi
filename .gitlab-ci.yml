@@ -1,0 +1,83 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  DOCKER_HOST: tcp://docker:2375
+  DOCKER_TLS_CERTDIR: ''
+  DOCKER_DRIVER: overlay
+  PUB_CACHE: $CI_PROJECT_DIR/.pub-cache
+  GRADLE_USER_HOME: $CI_PROJECT_DIR/.gradle
+  DOCKER_IMAGE_FLUTTER: "cirrusci/flutter:2.5.3"
+
+.job-template:
+  interruptible: true
+  tags:
+    - docker
+
+.master-job-template:
+  extends: .job-template
+  only:
+    refs:
+      - master
+
+.mr-job-template:
+  extends: .job-template
+  only:
+    refs:
+      - merge_requests
+      - master
+
+.with-dart-pub-cache:
+  cache:
+    key: dart-pub
+    paths:
+      - .pub-cache
+
+.with-flutter-pub-cache:
+  cache:
+    key: flutter-pub
+    paths:
+      - .pub-cache
+
+build:example:
+  stage: build
+  image: $DOCKER_IMAGE_FLUTTER
+  extends:
+    - .mr-job-template
+    - .with-flutter-pub-cache
+  script:
+    - cd "$CI_PROJECT_DIR/example/"
+    - flutter format --set-exit-if-changed .
+    - flutter pub get
+    - flutter analyze --no-fatal-infos .
+    - flutter test
+    - export VERSION=$(git describe --tags --always)
+    - flutter build web --release --web-renderer canvaskit --dart-define=BASE_URL="https://jelenski.gitlab.io" --dart-define=VERSION_TAG="$VERSION" --base-href="/ditredi/"
+    - cd "$CI_PROJECT_DIR/example/build/web"
+    - cat index.html | sed -e "s/main.dart.js/main.dart.js?v=$VERSION/g" > index2.html
+    - rm index.html
+    - mv index2.html index.html
+  artifacts:
+    paths:
+      - example/build/web
+    expire_in: 1 day
+
+pages:
+  extends: .master-job-template
+  stage: deploy
+  variables:
+    FF_USE_FASTZIP: "true"
+    ARTIFACT_COMPRESSION_LEVEL: "fastest"
+  dependencies:
+    - build:app
+  script:
+    - mv "$CI_PROJECT_DIR/example/build/web" "$CI_PROJECT_DIR/public"
+    - find public -type f -regex '.*\.\(htm\|html\|txt\|text\|js\|css\)$' -exec gzip -f -k {} \;
+    - find public -type f -regex '.*\.\(htm\|html\|txt\|text\|js\|css\)$' -exec brotli -f -k {} \;
+  artifacts:
+    paths:
+      - public
+  environment:
+    name: app
+    url: https://jelenski.gitlab.io/ditredi
