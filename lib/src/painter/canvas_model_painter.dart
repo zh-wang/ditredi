@@ -1,0 +1,197 @@
+import 'dart:math' as math;
+import 'dart:math';
+import 'dart:typed_data';
+import 'dart:ui';
+
+import 'package:collection/collection.dart';
+import 'package:ditredi/ditredi.dart';
+import 'package:flutter/widgets.dart';
+import 'package:vector_math/vector_math_64.dart';
+
+class CanvasModelPainter extends CustomPainter {
+  static const _dimension = 2;
+  var _isDirty = true;
+  final DiTreDiController _controller;
+  Aabb3 bounds = Aabb3();
+
+  final List<Model3D<dynamic>> _figures;
+
+  var _colorsToDraw = Int32List(0);
+  var _colorsBuffer = Int32List(0);
+  var _verticesToDraw = Float32List(0);
+  var _verticesBuffer = Float32List(0);
+  var _zIndex = Float32List(0);
+  late PriorityQueue _priorityQueue;
+
+  final Paint _vPaint = Paint()..isAntiAlias = true;
+  final DiTreDiConfig _config;
+
+  CanvasModelPainter(
+    this._figures,
+    Aabb3? bounds,
+    this._controller,
+    this._config,
+  ) : super(repaint: _controller) {
+    _controller.addListener(() {
+      _isDirty = true;
+    });
+
+    _setupBounds(_figures, bounds);
+
+    final verticesCount = _figures.fold(0, (int p, e) => p + e.verticesCount());
+    _verticesToDraw = Float32List(verticesCount * _dimension);
+    _colorsToDraw = Int32List(verticesCount);
+    _zIndex = Float32List(verticesCount ~/ 3);
+
+    if (_config.supportZIndex) {
+      _verticesBuffer = Float32List(verticesCount * _dimension);
+      _colorsBuffer = Int32List(verticesCount);
+      _priorityQueue = PriorityQueue((a, b) {
+        return _zIndex[a].compareTo(_zIndex[b]);
+      });
+    }
+  }
+
+  /////////////////////////
+  // paint cache values
+  /////////////////////////
+  final _matrix = Matrix4.zero();
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    canvas.save();
+
+    final viewPortX = size.width;
+    final viewPortY = size.height;
+
+    canvas.translate(viewPortX / 2, viewPortY / 2);
+
+    _controller.viewScale = math.min(viewPortX, viewPortY) / 2;
+    _isDirty = false;
+
+    final rotationX = _degreeToRadians(_controller.rotationX);
+    final rotationY = _degreeToRadians(_controller.rotationY);
+    final rotationZ = _degreeToRadians(_controller.rotationZ);
+
+    final dx = bounds.center.x;
+    final dy = bounds.center.y;
+    final dz = bounds.center.z;
+
+    final scale = _controller.scale;
+
+    _matrix.setIdentity();
+
+    if (_config.perspective) _matrix.setEntry(3, 2, -0.001);
+
+    _matrix
+      ..translate(_controller.translation.dx, _controller.translation.dy, 0)
+      ..translate(-dx * scale, dy * scale, dz * scale)
+      ..scale(scale, -scale, -scale)
+      ..translate(dx, dy, dz)
+      ..rotateX(rotationX)
+      ..rotateY(rotationY)
+      ..rotateZ(rotationZ)
+      ..translate(-dx, -dy, -dz);
+
+    var vertexIndex = 0;
+    for (var i = 0; i < _figures.length; i++) {
+      final figure = _figures[i];
+      figure.paint(
+        _config,
+        figure,
+        _matrix,
+        _controller.light,
+        vertexIndex,
+        _zIndex,
+        _colorsToDraw,
+        _verticesToDraw,
+      );
+      vertexIndex += figure.verticesCount();
+    }
+
+    if (_config.supportZIndex) {
+      _drawWithZIndex(canvas);
+    } else {
+      _drawFlat(canvas);
+    }
+
+    canvas.restore();
+  }
+
+  void _drawFlat(Canvas canvas) {
+    canvas.drawVertices(
+      Vertices.raw(
+        VertexMode.triangles,
+        _verticesToDraw,
+        colors: _colorsToDraw,
+      ),
+      BlendMode.src,
+      _vPaint,
+    );
+  }
+
+  void _drawWithZIndex(Canvas canvas) {
+    _priorityQueue.clear();
+    for (var i = 0; i < _zIndex.length; i++) {
+      _priorityQueue.add(i);
+    }
+
+    var verticesCounter = 0;
+    var colorCounter = 0;
+    while (_priorityQueue.isNotEmpty) {
+      final faceIndex = _priorityQueue.removeFirst();
+      final vertexIndex = faceIndex * 6;
+      _verticesBuffer[verticesCounter + 0] = _verticesToDraw[vertexIndex + 0];
+      _verticesBuffer[verticesCounter + 1] = _verticesToDraw[vertexIndex + 1];
+      _verticesBuffer[verticesCounter + 2] = _verticesToDraw[vertexIndex + 2];
+      _verticesBuffer[verticesCounter + 3] = _verticesToDraw[vertexIndex + 3];
+      _verticesBuffer[verticesCounter + 4] = _verticesToDraw[vertexIndex + 4];
+      _verticesBuffer[verticesCounter + 5] = _verticesToDraw[vertexIndex + 5];
+
+      final colorIndex = faceIndex * 3;
+      _colorsBuffer[colorCounter + 0] = _colorsToDraw[colorIndex];
+      _colorsBuffer[colorCounter + 1] = _colorsToDraw[colorIndex];
+      _colorsBuffer[colorCounter + 2] = _colorsToDraw[colorIndex];
+
+      verticesCounter += 6;
+      colorCounter += 3;
+    }
+
+    canvas.drawVertices(
+      Vertices.raw(
+        VertexMode.triangles,
+        _verticesBuffer,
+        colors: _colorsBuffer,
+      ),
+      BlendMode.src,
+      _vPaint,
+    );
+  }
+
+  void _setupBounds(List<Model3D<dynamic>> figures, Aabb3? bounds) {
+    if (figures.isEmpty) return;
+
+    if (bounds == null) {
+      final points =
+          figures.map((e) => e.toPoints()).flatten().map((e) => e.position);
+      bounds = Aabb3.minMax(points.first, points.first);
+      for (var p in points) {
+        bounds.hullPoint(p);
+      }
+    }
+
+    double spreadX = bounds.max.x - bounds.min.x;
+    double spreadY = bounds.max.y - bounds.min.y;
+    double spreadZ = bounds.max.z - bounds.min.z;
+    _controller.modelScale = 1 / max(spreadX, max(spreadY, spreadZ));
+
+    this.bounds = bounds;
+  }
+
+  double _degreeToRadians(double degree) {
+    return degree * (math.pi / 180.0);
+  }
+
+  @override
+  bool shouldRepaint(CanvasModelPainter oldDelegate) => _isDirty;
+}
