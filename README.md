@@ -1,10 +1,13 @@
+![Cube3D](test/paint/golden/cube/large_set.png)
+
 DiTreDi
 ===========
 
 A flutter package that displays large 3D datasets on a transparent canvas.
 
-Live web example: https://jelenski.gitlab.io/ditredi/
-Example source code: [example](./example).
+[Live web example](https://jelenski.gitlab.io/ditredi/)
+
+[Example source code](./example)
 
 ## Preface
 
@@ -28,6 +31,8 @@ DiTreDi was created to efficiently display datasets and meshes in 3D space. It w
     - [Point3D](#point3d)
     - [PointPlane3D](#pointplane3d)
   - [Transformations](#transformations)
+    - [Points and wireframes](#points-and-wireframes)
+    - [Matrix transformation](#matrix-transformation)
   - [Benchmarks](#benchmarks)
 
 ## Getting started
@@ -270,6 +275,8 @@ DiTreDi(
 
 ## Transformations
 
+### Points and wireframes
+
 Each figure could be transformed to points or lines (wireframe).
 
 ```dart
@@ -289,6 +296,65 @@ DiTreDi(
 ```
 
 ![Lines](test/paint/golden/plane_3d/lines.png)
+
+### Matrix transformation
+
+Figures might be rotated, translated and scaled with `TransformModifier3D` and `Matrix4`.
+
+Each transformation is made for `0,0,0` coordinates.
+
+```dart
+DiTreDi(
+    figures: [
+        TransformModifier3D(
+            Cube3D(2, Vector3(1, 1, 1)),
+            Matrix4.identity()
+              ..setRotationX(10)
+              ..setRotationY(10)
+              ..setRotationZ(10)),
+    ],
+)
+```
+
+![Transformation](test/paint/golden/modifier_3d/transformation.png)
+
+To rotate figure around its "own" position, you must translate, rotate and translate back.
+
+```dart
+DiTreDi(
+    figures: [
+        Cube3D(2, Vector3(0, 0, 0)),
+        TransformModifier3D(
+            Cube3D(2, Vector3(2, 2, 2)),
+            Matrix4.identity()
+              ..translate(2.0, 2.0, 2.0)
+              ..rotateZ(10)
+              ..rotateX(10)
+              ..translate(-2.0, -2.0, -2.0)),
+    ],
+)
+```
+
+![Transformation](test/paint/golden/modifier_3d/self_rotation.png)
+
+Transform `Group3D` to apply matrix to each figure.
+
+```dart
+DiTreDi(
+    figures: [
+        Cube3D(2, Vector3(0, 0, 0)),
+        TransformModifier3D(
+          Group3D([
+            Cube3D(2, Vector3(2, 2, 2)),
+            Cube3D(2, Vector3(4, 4, 4)),
+          ]),
+          transformation,
+        ),
+    ],
+)
+```
+
+![Transformation](test/paint/golden/modifier_3d/group.png)
 
 ## Benchmarks
 

@@ -16,25 +16,25 @@ class Cube3D extends Group3D {
           // |  /  | /
           // o-----o
           /////
-          Plane3D(size, Axis3D.x, true,
-              Vector3(position.x - size, position.y, position.z),
+          Plane3D(size / 2, Axis3D.x, true,
+              Vector3(position.x - size / 2, position.y, position.z),
               color: color),
-          Plane3D(size, Axis3D.x, false,
-              Vector3(position.x + size, position.y, position.z),
-              color: color),
-          /////
-          Plane3D(size, Axis3D.y, false,
-              Vector3(position.x, position.y + size, position.z),
-              color: color),
-          Plane3D(size, Axis3D.y, true,
-              Vector3(position.x, position.y - size, position.z),
+          Plane3D(size / 2, Axis3D.x, false,
+              Vector3(position.x + size / 2, position.y, position.z),
               color: color),
           /////
-          Plane3D(size, Axis3D.z, false,
-              Vector3(position.x, position.y, position.z - size),
+          Plane3D(size / 2, Axis3D.y, false,
+              Vector3(position.x, position.y + size / 2, position.z),
               color: color),
-          Plane3D(size, Axis3D.z, true,
-              Vector3(position.x, position.y, position.z + size),
+          Plane3D(size / 2, Axis3D.y, true,
+              Vector3(position.x, position.y - size / 2, position.z),
+              color: color),
+          /////
+          Plane3D(size / 2, Axis3D.z, false,
+              Vector3(position.x, position.y, position.z - size / 2),
+              color: color),
+          Plane3D(size / 2, Axis3D.z, true,
+              Vector3(position.x, position.y, position.z + size / 2),
               color: color),
         ]);
 

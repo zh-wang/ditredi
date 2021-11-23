@@ -44,4 +44,32 @@ void main() {
       config: const DiTreDiConfig(perspective: false),
     ));
   });
+
+  diTreDiDrawTest('cube/large_set.png', (tester, controller) async {
+    controller.update(rotationY: 50, rotationX: 30);
+    await tester.pumpWidget(DiTreDi(
+      figures: [
+        ..._generateCubes(),
+      ],
+      config: const DiTreDiConfig(),
+      controller: controller,
+    ));
+  });
+}
+
+Iterable<Cube3D> _generateCubes() sync* {
+  for (var x = 0; x < 50; x++) {
+    for (var y = 0; y < 50; y++) {
+      for (var z = 0; z < 50; z++) {
+        yield Cube3D(
+          0.5,
+          Vector3(
+            x.toDouble() * 2,
+            y.toDouble() * 2,
+            z.toDouble() * 2,
+          ),
+        );
+      }
+    }
+  }
 }

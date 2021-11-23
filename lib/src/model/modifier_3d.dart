@@ -61,7 +61,7 @@ class TransformModifier3D extends Modifier3D {
     return TransformModifier3D(figure.clone() as Model3D, transformation);
   }
 
-  final Matrix4 tmp = Matrix4.zero();
+  static final Matrix4 tmp = Matrix4.zero();
 
   @override
   void paint(
@@ -75,7 +75,7 @@ class TransformModifier3D extends Modifier3D {
       Float32List vertices) {
     tmp.setFrom(matrix);
     tmp.multiply(transformation);
-    figure.paint(config, model, tmp, normalizedLight, vertexIndex, zIndices,
+    figure.paint(config, figure, tmp, normalizedLight, vertexIndex, zIndices,
         colors, vertices);
   }
 }
