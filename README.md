@@ -1,13 +1,34 @@
 DiTreDi
 ===========
 
-A flutter package that displays large 3D datasets on transparent canvas.
+A flutter package that displays large 3D datasets on a transparent canvas.
 
 Live web example: https://jelenski.gitlab.io/ditredi/
+Example source code: [example](./example).
 
 ## Preface
 
 DiTreDi was created to efficiently display datasets and meshes in 3D space. It wasn't intended to create a 3D game engine and is rather useful for displaying static meshes.
+
+## Table of Contents
+
+- [DiTreDi](#ditredi)
+  - [Preface](#preface)
+  - [Table of Contents](#table-of-contents)
+  - [Getting started](#getting-started)
+  - [Controller](#controller)
+  - [Config](#config)
+  - [Shapes](#shapes)
+    - [Cube3D](#cube3d)
+    - [Face3D](#face3d)
+    - [Group3D](#group3d)
+    - [Line3D](#line3d)
+    - [Mesh3D](#mesh3d)
+    - [Plane3D](#plane3d)
+    - [Point3D](#point3d)
+    - [PointPlane3D](#pointplane3d)
+  - [Transformations](#transformations)
+  - [Benchmarks](#benchmarks)
 
 ## Getting started
 
@@ -190,7 +211,7 @@ DiTreDi(
 
 ### Mesh3D
 
-Mesh made of faces (triangles).
+A mesh made of faces (triangles).
 You could use `ObjParser` to load it from .obj file contents.
 
 ```dart
@@ -220,7 +241,7 @@ DiTreDi(
 
 ### Point3D
 
-A point (really, a square).
+A point (exactly a square).
 
 ```dart
 DiTreDi(
@@ -268,3 +289,7 @@ DiTreDi(
 ```
 
 ![Lines](test/paint/golden/plane_3d/lines.png)
+
+## Benchmarks
+
+TBD
