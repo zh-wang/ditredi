@@ -46,7 +46,7 @@ void main() {
   });
 
   diTreDiDrawTest('cube/large_set.png', (tester, controller) async {
-    controller.update(rotationY: 50, rotationX: 30);
+    controller.update(rotationY: 0, rotationX: 0);
     await tester.pumpWidget(DiTreDi(
       figures: [
         ..._generateCubes(),

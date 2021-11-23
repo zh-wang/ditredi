@@ -1,3 +1,7 @@
+## 0.0.4
+
+* Readme logo.
+
 ## 0.0.3
 
 * Transformations readme.

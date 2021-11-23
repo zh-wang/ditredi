@@ -1,4 +1,7 @@
-![Cube3D](test/paint/golden/cube/large_set.png)
+<p align="center">
+  <img src="test/paint/golden/cube/large_set.png"
+width="200" />
+</p>
 
 DiTreDi
 ===========
