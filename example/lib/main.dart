@@ -40,11 +40,18 @@ class MyApp extends StatelessWidget {
                 child: DiTreDi(
                   figures: [
                     // place figures in drawing order when z-index is disabled
-                    ...Cube3D(2, vector.Vector3(-5, 0, -5), color: Colors.black).toLines(),
-                    ...Cube3D(2, vector.Vector3(-5, 4, -5), color: Colors.black).toLines(),
-                    ...Cube3D(2, vector.Vector3(-5, 8, -5), color: Colors.black).toLines(),
-                    ...Cube3D(2, vector.Vector3(-5, 12, -5), color: Colors.black).toLines(),
-                    ...Cube3D(2, vector.Vector3(-5, 16, -5), color: Colors.black).toLines(),
+                    ...Cube3D(2, vector.Vector3(-5, 0, -5), color: Colors.black)
+                        .toLines(),
+                    ...Cube3D(2, vector.Vector3(-5, 4, -5), color: Colors.black)
+                        .toLines(),
+                    ...Cube3D(2, vector.Vector3(-5, 8, -5), color: Colors.black)
+                        .toLines(),
+                    ...Cube3D(2, vector.Vector3(-5, 12, -5),
+                            color: Colors.black)
+                        .toLines(),
+                    ...Cube3D(2, vector.Vector3(-5, 16, -5),
+                            color: Colors.black)
+                        .toLines(),
                     ..._generateCubeLines(),
                   ],
                   controller: bController,
