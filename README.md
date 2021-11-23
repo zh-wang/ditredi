@@ -1,6 +1,6 @@
 <p align="center">
   <img src="https://gitlab.com/jelenski/ditredi/-/raw/master/test/paint/golden/cube/large_set.png"
-width="200" />
+width="400" />
 </p>
 
 DiTreDi
