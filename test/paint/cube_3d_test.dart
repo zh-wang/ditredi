@@ -46,24 +46,21 @@ void main() {
   });
 
   diTreDiDrawTest('cube/large_set.png', (tester, controller) async {
-    controller.update(rotationY: 0, rotationX: 0);
+    controller.update(rotationY: 30, rotationX: 0, userScale: 3);
     await tester.pumpWidget(DiTreDi(
       figures: [
-        TransformModifier3D(
-          Group3D([..._generateCubes()]),
-          Matrix4.identity()..rotateY(10),
-        ),
+        ..._generateCubes()
       ],
       config: const DiTreDiConfig(),
       controller: controller,
     ));
-  });
+  }, width: 1000, height: 400);
 }
 
 Iterable<Cube3D> _generateCubes() sync* {
   for (var x = -20; x < 20; x++) {
-    for (var y = -20; y < 20; y++) {
-      for (var z = -20; z < 20; z++) {
+    for (var y = -10; y < 10; y++) {
+      for (var z = -5; z < 5; z++) {
         yield Cube3D(
           1,
           Vector3(

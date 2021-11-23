@@ -6,10 +6,12 @@ import 'package:flutter_test/flutter_test.dart';
 void diTreDiDrawTest(
     String filename,
     Future<void> Function(WidgetTester tester, DiTreDiController controller)
-        testBody) {
+        testBody,
+    {double width = 1000,
+    double height = 1000}) {
   testWidgets(filename, (WidgetTester tester) async {
     final controller = DiTreDiController();
-    await tester.setScreenSize();
+    await tester.setScreenSize(width: width, height: height);
     await testBody(tester, controller);
     await expectLater(
         find.byType(DiTreDi), matchesGoldenFile("golden/$filename"));
