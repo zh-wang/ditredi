@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="test/paint/golden/cube/large_set.png"
+  <img src="https://gitlab.com/jelenski/ditredi/-/raw/master/test/paint/golden/cube/large_set.png"
 width="200" />
 </p>
 

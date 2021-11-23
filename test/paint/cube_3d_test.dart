@@ -49,7 +49,10 @@ void main() {
     controller.update(rotationY: 0, rotationX: 0);
     await tester.pumpWidget(DiTreDi(
       figures: [
-        ..._generateCubes(),
+        TransformModifier3D(
+          Group3D([..._generateCubes()]),
+          Matrix4.identity()..rotateY(10),
+        ),
       ],
       config: const DiTreDiConfig(),
       controller: controller,
@@ -58,15 +61,15 @@ void main() {
 }
 
 Iterable<Cube3D> _generateCubes() sync* {
-  for (var x = 0; x < 50; x++) {
-    for (var y = 0; y < 50; y++) {
-      for (var z = 0; z < 50; z++) {
+  for (var x = -20; x < 20; x++) {
+    for (var y = -20; y < 20; y++) {
+      for (var z = -20; z < 20; z++) {
         yield Cube3D(
-          0.5,
+          1,
           Vector3(
-            x.toDouble() * 2,
-            y.toDouble() * 2,
-            z.toDouble() * 2,
+            x.toDouble() * 1.5,
+            y.toDouble() * 1.5,
+            z.toDouble() * 1.5,
           ),
         );
       }

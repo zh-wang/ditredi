@@ -1,3 +1,7 @@
+## 0.0.5
+
+* Fix readme logo.
+
 ## 0.0.4
 
 * Readme logo.
