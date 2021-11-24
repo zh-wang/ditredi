@@ -1,3 +1,7 @@
+## 0.0.6
+
+* More tests.
+
 ## 0.0.5
 
 * Fix readme logo.

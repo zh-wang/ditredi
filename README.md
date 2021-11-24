@@ -1,7 +1,4 @@
-<p align="center">
-  <img src="https://gitlab.com/jelenski/ditredi/-/raw/master/test/paint/golden/cube/large_set.png"
-width="400" />
-</p>
+![Splash](test/paint/golden/splash.png)
 
 DiTreDi
 ===========
