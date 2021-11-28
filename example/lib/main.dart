@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:ditredi/ditredi.dart';
+import 'package:flutter/material.dart';
 import 'package:vector_math/vector_math_64.dart' as vector;
 
 void main() {
@@ -11,6 +11,7 @@ class MyApp extends StatelessWidget {
 
   final aController = DiTreDiController();
   final bController = DiTreDiController();
+  final cController = DiTreDiController();
 
   @override
   Widget build(BuildContext context) {
@@ -20,35 +21,56 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: Scaffold(
-        body: Flex(
-          direction: Axis.horizontal,
-          children: [
-            Expanded(
-              flex: 1,
-              child: DiTreDiDraggable(
-                controller: aController,
-                child: DiTreDi(
-                  figures: _generateCubes().toList(),
+        body: LayoutBuilder(
+          builder: (_, constraints) => Flex(
+            direction:
+                constraints.maxWidth < 600 ? Axis.vertical : Axis.horizontal,
+            children: [
+              Expanded(
+                flex: 1,
+                child: DiTreDiDraggable(
                   controller: aController,
-                ),
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: DiTreDiDraggable(
-                controller: bController,
-                child: DiTreDi(
-                  figures: _generateCubeLines().toList(),
-                  controller: bController,
-                  // disable z index to boost drawing performance
-                  // for wireframes and points
-                  config: const DiTreDiConfig(
-                    supportZIndex: false,
+                  child: DiTreDi(
+                    figures: _generateCubes().toList(),
+                    controller: aController,
                   ),
                 ),
               ),
-            ),
-          ],
+              Expanded(
+                flex: 1,
+                child: DiTreDiDraggable(
+                  controller: bController,
+                  child: DiTreDi(
+                    figures: _generateCubeLines().toList(),
+                    controller: bController,
+                    // disable z index to boost drawing performance
+                    // for wireframes and points
+                    config: const DiTreDiConfig(
+                      supportZIndex: false,
+                    ),
+                  ),
+                ),
+              ),
+              FutureBuilder<List<Face3D>>(
+                  future:
+                      ObjParser().loadFromResources('assets/lowpolytree.obj'),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Expanded(
+                        flex: 1,
+                        child: DiTreDiDraggable(
+                          controller: cController,
+                          child: DiTreDi(
+                            figures: [Mesh3D(snapshot.data ?? [])],
+                            controller: cController,
+                          ),
+                        ),
+                      );
+                    }
+                    return Container();
+                  }),
+            ],
+          ),
         ),
       ),
     );
