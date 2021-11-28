@@ -1,37 +1,149 @@
+import 'dart:io';
+import 'dart:ui';
+
 import 'package:ditredi/ditredi.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:vector_math/vector_math_64.dart';
 
 class ObjParser {
-  final _whiteSpace = RegExp(r"\s+");
+  static const _usemtl = "usemtl";
+  static const _mtllib = "mtllib";
+  static const _newmtl = "newmtl";
+  static const _kd = "Kd";
 
-  Future<List<Face3D>> parse(String data) async {
-    final lines = data.split("\n");
+  static final _whiteSpace = RegExp(r"\s+");
+
+  /// Parses a Wavefront OBJ file from the given [objResourceName].
+  Future<List<Face3D>> loadFromResources(String objResourceName) async {
+    assert(
+      !objResourceName.endsWith('.mtl'),
+      "The resource name must not end with '.mtl'. Use filename with obj extension: ${objResourceName.replaceAll(".mtl", ".obj")}",
+    );
+
+    final modelData = await rootBundle.loadString(objResourceName);
+    final resourcePath = Uri(path: objResourceName);
+    final dirPath =
+        resourcePath.pathSegments.take(resourcePath.pathSegments.length - 1);
+    final lines = modelData.split('\n');
+    final materialLib = <String, Map<String, _Material>>{};
+    for (var line in lines) {
+      if (line.startsWith(_mtllib)) {
+        final libName = line.split(_whiteSpace).last;
+        final content = await rootBundle
+            .loadString(Uri(pathSegments: [...dirPath, libName]).path)
+            .onError((_, __) => "");
+        final material = await _parseMtlLib(content);
+        if (material != null) {
+          materialLib[libName] = material;
+        }
+      }
+    }
+    return parseLines(lines, materialLib: materialLib);
+  }
+
+  /// Parses a Wavefront OBJ file from the given [resourceName].
+  Future<List<Face3D>> loadFromFile(File objFile) async {
+    assert(
+      !objFile.path.endsWith('.mtl'),
+      "The filename name must not end with '.mtl'. Use filename with obj extension: ${objFile.path.replaceAll(".mtl", ".obj")}",
+    );
+
+    final lines = objFile.readAsLinesSync();
+    final objDir = objFile.parent.uri;
+    final materialLib = <String, Map<String, _Material>>{};
+    for (var line in lines) {
+      if (line.startsWith(_mtllib)) {
+        final libName = line.split(_whiteSpace).last;
+        final libPath = Uri.parse("$objDir$libName");
+        try {
+          final content = File.fromUri(libPath).readAsStringSync();
+          final material = await _parseMtlLib(content);
+          if (material != null) {
+            materialLib[libName] = material;
+          }
+        } on FileSystemException {
+          debugPrint("Could not find material library: $libName");
+        }
+      }
+    }
+    return parseLines(lines, materialLib: materialLib);
+  }
+
+  Future<List<Face3D>> parse(
+    String data, {
+    Map<String, Map<String, _Material>> materialLib = const {},
+  }) async {
+    return parseLines(data.split('\n'), materialLib: materialLib);
+  }
+
+  Future<List<Face3D>> parseLines(
+    List<String> lines, {
+    Map<String, Map<String, _Material>> materialLib = const {},
+  }) async {
     final vertices = <Vector3>[];
     final faces = <Face3D>[];
-
+    Map<String, _Material> materials = {};
+    _Material currentMaterial = _Material.defaultMaterial();
     for (var line in lines) {
       List<String> chars = line.split(_whiteSpace);
 
       if (chars[0] == "v") {
         // vertex
-        final vertex = Vector3(
+        vertices.add(Vector3(
           double.parse(chars[1]),
           double.parse(chars[3]),
           double.parse(chars[2]),
-        );
-
-        vertices.add(vertex);
+        ));
       } else if (chars[0] == "f") {
         // face
-        faces.add(Face3D(Triangle.points(
-          vertices[_parseVertexIndex(chars[1]) - 1].clone(),
-          vertices[_parseVertexIndex(chars[2]) - 1].clone(),
-          vertices[_parseVertexIndex(chars[3]) - 1].clone(),
-        )));
+        for (int i = 1; i < chars.length - 1; i++) {
+          faces.add(Face3D(
+            Triangle.points(
+              vertices[_parseVertexIndex(chars[1]) - 1].clone(),
+              vertices[_parseVertexIndex(chars[i]) - 1].clone(),
+              vertices[_parseVertexIndex(chars[i + 1]) - 1].clone(),
+            ),
+            color: currentMaterial.color,
+          ));
+        }
+      } else if (chars[0] == _usemtl) {
+        currentMaterial = materials[chars[1]] ?? _Material.defaultMaterial();
+      } else if (chars[0] == _mtllib) {
+        materials = materialLib[chars[1]] ?? <String, _Material>{};
       }
     }
 
     return faces;
+  }
+
+  Future<Map<String, _Material>?> _parseMtlLib(String? materialData) async {
+    final materials = <String, _Material>{};
+
+    if (materialData == null || materialData.isEmpty) return null;
+
+    final lines = materialData.split("\n");
+    String name = '';
+    for (var line in lines) {
+      List<String> chars = line.split(_whiteSpace);
+      if (chars[0] == _newmtl) {
+        name = chars[1];
+      }
+      if (chars[0] == _kd) {
+        final r = double.parse(chars[1]);
+        final g = double.parse(chars[2]);
+        final b = double.parse(chars[3]);
+        materials[name] = _Material(
+          color: Color.fromARGB(
+            255,
+            (255 * r).toInt(),
+            (255 * g).toInt(),
+            (255 * b).toInt(),
+          ),
+        );
+      }
+    }
+    return materials;
   }
 
   int _parseVertexIndex(String s) {
@@ -40,5 +152,17 @@ class ObjParser {
     } else {
       return int.parse(s);
     }
+  }
+}
+
+class _Material {
+  final Color? color;
+
+  _Material({required this.color});
+
+  factory _Material.defaultMaterial() {
+    return _Material(
+      color: null, // default color is applied from DiTreDiConfig.
+    );
   }
 }

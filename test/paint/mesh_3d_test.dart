@@ -101,17 +101,24 @@ void main() {
       controller: controller,
     ));
   });
+
+  diTreDiDrawTest('mesh_3d/lowpolytree.png', (tester, controller) async {
+    final mesh = await _getPolytree();
+    await tester.pumpWidget(DiTreDi(figures: [mesh], controller: controller));
+  });
 }
 
 Future<Mesh3D> _getTorus() async => _getObjModel("torus.obj");
 
 Future<Mesh3D> _getTerrain() async => _getObjModel("terrain.obj");
 
+Future<Mesh3D> _getPolytree() async => _getObjModel("lowpolytree.obj");
+
 Future<List<Point3D>> _getTerrainCsv() async => _getCsv("terrain.csv");
 
 Future<Mesh3D> _getObjModel(String filename) async {
   final file = File("${_getCurrentDir()}/../assets/$filename");
-  final faces = await ObjParser().parse(file.readAsStringSync());
+  final faces = await ObjParser().loadFromFile(file);
   return Mesh3D(faces);
 }
 
