@@ -220,6 +220,8 @@ A mesh made of faces (triangles).
 You could use `ObjParser` to load it from .obj file contents.
 Currently only material (mtl) as colors are supported.
 
+Load from string:
+
 ```dart
 DiTreDi(
     figures: [
@@ -228,6 +230,8 @@ DiTreDi(
 )
 ```
 
+Load from flutter resources:
+
 ```dart
 DiTreDi(
     figures: [
@@ -235,6 +239,8 @@ DiTreDi(
     ],
 )
 ```
+
+Load from file:
 
 ```dart
 DiTreDi(
