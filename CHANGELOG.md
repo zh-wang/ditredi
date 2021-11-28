@@ -1,3 +1,7 @@
+## 0.0.7
+
+* Improved obj file support thanks to @bennibau.
+
 ## 0.0.6
 
 * More tests.

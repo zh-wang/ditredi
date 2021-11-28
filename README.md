@@ -218,11 +218,28 @@ DiTreDi(
 
 A mesh made of faces (triangles).
 You could use `ObjParser` to load it from .obj file contents.
+Currently only material (mtl) as colors are supported.
 
 ```dart
 DiTreDi(
     figures: [
         Mesh3D(await ObjParser().parse(meshLines));
+    ],
+)
+```
+
+```dart
+DiTreDi(
+    figures: [
+        Mesh3D(await ObjParser().loadFromResources("assets/model.obj"));
+    ],
+)
+```
+
+```dart
+DiTreDi(
+    figures: [
+        Mesh3D(await ObjParser().loadFromFile(File("files/model.obj")));
     ],
 )
 ```
