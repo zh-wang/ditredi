@@ -4,6 +4,7 @@ import 'package:ditredi/ditredi.dart';
 import 'package:ditredi/src/painter/model/model_3d_painter.dart';
 import 'package:vector_math/vector_math_64.dart';
 
+/// Draws [Pain3D].
 mixin Point3DPainter implements Model3DPainter<Point3D> {
   static final _p = Vector3.zero();
 

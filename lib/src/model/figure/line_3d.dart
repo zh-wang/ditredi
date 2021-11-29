@@ -6,12 +6,21 @@ import 'package:ditredi/src/painter/model/line_3d_painter.dart';
 import 'package:vector_math/hash.dart';
 import 'package:vector_math/vector_math_64.dart';
 
+/// A 3D line.
 class Line3D with Line3DPainter implements Model3D<Line3D> {
+  /// Start point.
   final Vector3 a;
+
+  /// End point.
   final Vector3 b;
+
+  /// Width of the line. Defaults to [DiTreDiConfig] setting.
   final double? width;
+
+  /// Color of the line. Defaults to [DiTreDiConfig] setting.
   final Color? color;
 
+  /// Creates a new line.
   Line3D(this.a, this.b, {this.width, this.color});
 
   @override
@@ -24,6 +33,7 @@ class Line3D with Line3DPainter implements Model3D<Line3D> {
     return Line3D(a.clone(), b.clone(), width: width, color: color);
   }
 
+  /// Copies the line.
   Line3D copyWith({
     Vector3? a,
     Vector3? b,

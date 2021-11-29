@@ -3,9 +3,12 @@ import 'dart:typed_data';
 import 'package:ditredi/ditredi.dart';
 import 'package:vector_math/vector_math_64.dart';
 
+/// Modifies drawing of [Model3D] objects.
 abstract class Modifier3D implements Model3D<Modifier3D> {
+  /// A figure to modify.
   final Model3D figure;
 
+  /// Creates a new modifier.
   Modifier3D(this.figure);
 
   @override
@@ -51,9 +54,13 @@ abstract class Modifier3D implements Model3D<Modifier3D> {
   }
 }
 
+/// Transformation of [Model3D] objects with [Matrix4].
 class TransformModifier3D extends Modifier3D {
+  /// A transformation matrix being multiplied
+  /// with the current transformation.
   final Matrix4 transformation;
 
+  /// Creates a new transformation modifier.
   TransformModifier3D(Model3D figure, this.transformation) : super(figure);
 
   @override
@@ -61,7 +68,7 @@ class TransformModifier3D extends Modifier3D {
     return TransformModifier3D(figure.clone() as Model3D, transformation);
   }
 
-  static final Matrix4 tmp = Matrix4.zero();
+  static final Matrix4 _tmp = Matrix4.zero();
 
   @override
   void paint(
@@ -73,9 +80,9 @@ class TransformModifier3D extends Modifier3D {
       Float32List zIndices,
       Int32List colors,
       Float32List vertices) {
-    tmp.setFrom(matrix);
-    tmp.multiply(transformation);
-    figure.paint(config, figure, tmp, normalizedLight, vertexIndex, zIndices,
+    _tmp.setFrom(matrix);
+    _tmp.multiply(transformation);
+    figure.paint(config, figure, _tmp, normalizedLight, vertexIndex, zIndices,
         colors, vertices);
   }
 }

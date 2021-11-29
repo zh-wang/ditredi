@@ -3,11 +3,18 @@ import 'dart:ui';
 import 'package:ditredi/ditredi.dart';
 import 'package:vector_math/vector_math_64.dart';
 
+/// A 3D cube.
 class Cube3D extends Group3D {
+  /// Cube size.
   final double size;
+
+  /// Cube position.
   final Vector3 position;
+
+  /// Cube color. Defaults to [DiTreDiConfig] setting.
   final Color? color;
 
+  /// Creates a cube.
   Cube3D(this.size, this.position, {this.color})
       : super([
           //     o-----o

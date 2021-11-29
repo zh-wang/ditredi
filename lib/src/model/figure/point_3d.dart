@@ -4,11 +4,18 @@ import 'package:ditredi/ditredi.dart';
 import 'package:ditredi/src/painter/model/point_3d_painter.dart';
 import 'package:vector_math/vector_math_64.dart';
 
+/// A point.
 class Point3D with Point3DPainter implements Model3D<Point3D> {
+  /// Position of the point.
   final Vector3 position;
+
+  /// Width of the point.
   final double? width;
+
+  /// Color of the point. Defaults to [DiTreDiConfig] setting.
   final Color? color;
 
+  /// Creates a point.
   Point3D(this.position, {this.width, this.color});
 
   @override
@@ -21,6 +28,7 @@ class Point3D with Point3DPainter implements Model3D<Point3D> {
     return Point3D(position.clone(), width: width, color: color);
   }
 
+  /// Copies the point.
   Point3D copyWith({Vector3? position, double? width, Color? color}) {
     return Point3D(
       position ?? this.position,

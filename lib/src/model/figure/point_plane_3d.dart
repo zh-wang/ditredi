@@ -3,14 +3,28 @@ import 'dart:ui';
 import 'package:ditredi/ditredi.dart';
 import 'package:vector_math/vector_math_64.dart';
 
+/// A plane with list of points.
+/// Used often to present a scale.
 class PointPlane3D extends Group3D {
+  /// Facing axis (x to left/right, y to up/down, z to far/near).
   final Axis3D axis;
+
+  /// Size of the plane.
   final double size;
+
+  /// Gap between points.
   final double gap;
+
+  /// Center of the plane.
   final Vector3 position;
+
+  /// Color of the plane. Defaults to [DiTreDiConfig] setting.
   final Color? color;
+
+  /// Width of points. Defaults to [DiTreDiConfig] setting.
   final double? pointWidth;
 
+  /// Creates a new [PointPlane3D].
   PointPlane3D(
     this.size,
     this.axis,

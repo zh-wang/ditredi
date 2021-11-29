@@ -2,10 +2,13 @@ import 'package:ditredi/ditredi.dart';
 import 'package:ditredi/src/painter/model/group_3d_painter.dart';
 import 'package:vector_math/vector_math_64.dart';
 
+/// A group of 3D objects.
 class Group3D with Group3DPainter implements Model3D<Group3D> {
+  /// The list of 3D objects in a group.
   final List<Model3D> figures;
   final int _verticesCount;
 
+  /// Creates a group of 3D objects.
   Group3D(
     this.figures,
   ) : _verticesCount = figures.fold(0, (int p, e) => p + e.verticesCount());

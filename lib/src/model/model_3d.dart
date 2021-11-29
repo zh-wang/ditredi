@@ -11,14 +11,20 @@ export 'package:ditredi/src/model/figure/plane_3d.dart';
 export 'package:ditredi/src/model/figure/point_3d.dart';
 export 'package:ditredi/src/model/figure/point_plane_3d.dart';
 
+/// Abstraction for all 3D figures.
 abstract class Model3D<T extends Model3D<T>> implements Model3DPainter<T> {
+  /// Makes a copy of this model.
   T clone();
 
+  /// Returns number of vertices.
   int verticesCount();
 
+  /// Converts model to a [List] of [Point3D].
   List<Point3D> toPoints();
 
+  /// Converts model to a [List] of [Line3D].
   List<Line3D> toLines();
 
+  /// Gets bounds of a model (min and max coordinates).
   Aabb3 getBounds();
 }

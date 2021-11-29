@@ -4,12 +4,20 @@ import 'package:ditredi/ditredi.dart';
 import 'package:ditredi/src/painter/model/face_3d_painter.dart';
 import 'package:vector_math/vector_math_64.dart';
 
+/// A face - triangle with direction.
+/// The face is defined by three points.
+/// Faces not facing the camera are not drawn.
 class Face3D with Face3DPainter implements Model3D<Face3D> {
+  /// Points of the face.
   final Triangle triangle;
+
+  /// Face color. Defaults to [DiTreDiConfig] setting.
   final Color? color;
 
+  /// Creates a face with the given points.
   Face3D(this.triangle, {this.color});
 
+  /// Creates a face from vertices.
   factory Face3D.fromVertices(
     Vector3 a,
     Vector3 b,

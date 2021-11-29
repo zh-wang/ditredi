@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:vector_math/vector_math_64.dart';
 
+/// Parser for Wavefront .obj files.
 class ObjParser {
   static const _usemtl = "usemtl";
   static const _mtllib = "mtllib";
@@ -26,7 +27,7 @@ class ObjParser {
     final dirPath =
         resourcePath.pathSegments.take(resourcePath.pathSegments.length - 1);
     final lines = modelData.split('\n');
-    final materialLib = <String, Map<String, _Material>>{};
+    final materialLib = <String, Map<String, ObjMaterial>>{};
     for (var line in lines) {
       if (line.startsWith(_mtllib)) {
         final libName = line.split(_whiteSpace).last;
@@ -51,7 +52,7 @@ class ObjParser {
 
     final lines = objFile.readAsLinesSync();
     final objDir = objFile.parent.uri;
-    final materialLib = <String, Map<String, _Material>>{};
+    final materialLib = <String, Map<String, ObjMaterial>>{};
     for (var line in lines) {
       if (line.startsWith(_mtllib)) {
         final libName = line.split(_whiteSpace).last;
@@ -70,21 +71,23 @@ class ObjParser {
     return parseLines(lines, materialLib: materialLib);
   }
 
+  /// Creates a [List] of [Face3D] for given obj [data] and [materialLib].
   Future<List<Face3D>> parse(
     String data, {
-    Map<String, Map<String, _Material>> materialLib = const {},
+    Map<String, Map<String, ObjMaterial>> materialLib = const {},
   }) async {
     return parseLines(data.split('\n'), materialLib: materialLib);
   }
 
+  /// Creates a [List] of [Face3D] for given obj [lines] and [materialLib].
   Future<List<Face3D>> parseLines(
     List<String> lines, {
-    Map<String, Map<String, _Material>> materialLib = const {},
+    Map<String, Map<String, ObjMaterial>> materialLib = const {},
   }) async {
     final vertices = <Vector3>[];
     final faces = <Face3D>[];
-    Map<String, _Material> materials = {};
-    _Material currentMaterial = _Material.defaultMaterial();
+    Map<String, ObjMaterial> materials = {};
+    ObjMaterial currentMaterial = ObjMaterial.defaultMaterial();
     for (var line in lines) {
       List<String> chars = line.split(_whiteSpace);
 
@@ -108,17 +111,17 @@ class ObjParser {
           ));
         }
       } else if (chars[0] == _usemtl) {
-        currentMaterial = materials[chars[1]] ?? _Material.defaultMaterial();
+        currentMaterial = materials[chars[1]] ?? ObjMaterial.defaultMaterial();
       } else if (chars[0] == _mtllib) {
-        materials = materialLib[chars[1]] ?? <String, _Material>{};
+        materials = materialLib[chars[1]] ?? <String, ObjMaterial>{};
       }
     }
 
     return faces;
   }
 
-  Future<Map<String, _Material>?> _parseMtlLib(String? materialData) async {
-    final materials = <String, _Material>{};
+  Future<Map<String, ObjMaterial>?> _parseMtlLib(String? materialData) async {
+    final materials = <String, ObjMaterial>{};
 
     if (materialData == null || materialData.isEmpty) return null;
 
@@ -133,7 +136,7 @@ class ObjParser {
         final r = double.parse(chars[1]);
         final g = double.parse(chars[2]);
         final b = double.parse(chars[3]);
-        materials[name] = _Material(
+        materials[name] = ObjMaterial(
           color: Color.fromARGB(
             255,
             (255 * r).toInt(),
@@ -155,13 +158,17 @@ class ObjParser {
   }
 }
 
-class _Material {
+/// Material used for [Face3D].
+class ObjMaterial {
+  /// Color specified in the material file.
   final Color? color;
 
-  _Material({required this.color});
+  /// Creates a new [ObjMaterial].
+  ObjMaterial({required this.color});
 
-  factory _Material.defaultMaterial() {
-    return _Material(
+  /// Creates a default (empty) material.
+  factory ObjMaterial.defaultMaterial() {
+    return ObjMaterial(
       color: null, // default color is applied from DiTreDiConfig.
     );
   }

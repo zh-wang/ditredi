@@ -8,7 +8,9 @@ export 'package:ditredi/src/painter/model/group_3d_painter.dart';
 export 'package:ditredi/src/painter/model/line_3d_painter.dart';
 export 'package:ditredi/src/painter/model/point_3d_painter.dart';
 
+/// Abstraction for painting a [Model3D] in a drawer buffer.
 abstract class Model3DPainter<T extends Model3D<T>> {
+  /// Fills the buffer with the [Model3D] data.
   void paint(
     DiTreDiConfig config,
     T model,

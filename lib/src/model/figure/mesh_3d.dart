@@ -1,8 +1,11 @@
 import 'package:ditredi/ditredi.dart';
 
+/// A mesh made of [Face3D] (triangles).
 class Mesh3D extends Group3D {
+  /// List of faces making a mesh.
   final List<Face3D> faces;
 
+  /// Creates a new mesh.
   Mesh3D(
     this.faces,
   ) : super(faces);

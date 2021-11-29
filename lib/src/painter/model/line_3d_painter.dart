@@ -5,6 +5,7 @@ import 'package:ditredi/ditredi.dart';
 import 'package:ditredi/src/painter/model/model_3d_painter.dart';
 import 'package:vector_math/vector_math_64.dart';
 
+/// Draws a [Line3D].
 mixin Line3DPainter implements Model3DPainter<Line3D> {
   static final _a = Vector3.zero();
   static final _b = Vector3.zero();

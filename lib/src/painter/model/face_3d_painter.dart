@@ -5,6 +5,7 @@ import 'package:ditredi/ditredi.dart';
 import 'package:ditredi/src/painter/model/model_3d_painter.dart';
 import 'package:vector_math/vector_math_64.dart';
 
+/// Draws a [Face3D].
 mixin Face3DPainter implements Model3DPainter<Face3D> {
   static final _t =
       Triangle.points(Vector3.zero(), Vector3.zero(), Vector3.zero());

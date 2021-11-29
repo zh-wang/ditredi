@@ -1,8 +1,10 @@
 import 'package:ditredi/ditredi.dart';
 import 'package:vector_math/vector_math_64.dart';
 
-// Parses a csv file with x,y,z coordinates.
+/// Parser for a csv file.
 class CsvParser {
+  /// Parses a csv file with ',' as separator and x,y,z coordinates.
+  /// Creates a [List] of [Point3D]s.
   Future<List<Point3D>> parse(String data) async {
     return data
         .split('\n')

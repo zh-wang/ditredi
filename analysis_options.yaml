@@ -2,5 +2,7 @@ include: package:flutter_lints/flutter.yaml
 
 linter:
   rules:
-    - always_use_package_imports
-    - prefer_final_fields
+    always_use_package_imports: true
+    prefer_final_fields: true
+    library_private_types_in_public_api: true
+    public_member_api_docs: true

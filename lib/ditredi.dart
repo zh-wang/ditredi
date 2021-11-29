@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:ditredi/src/controller/ditredi_controller.dart';
+import 'package:ditredi/src/model/ditredi_config.dart';
 import 'package:ditredi/src/model/model_3d.dart';
 import 'package:ditredi/src/painter/canvas_model_painter.dart';
 import 'package:flutter/foundation.dart';
@@ -12,18 +14,29 @@ export 'package:ditredi/src/extensions/iterable_extensions.dart';
 export 'package:ditredi/src/extensions/vector_extensions.dart';
 export 'package:ditredi/src/model/axis.dart';
 export 'package:ditredi/src/model/model_3d.dart';
+export 'package:ditredi/src/model/ditredi_config.dart';
 export 'package:ditredi/src/model/modifier_3d.dart';
 export 'package:ditredi/src/model/vertices/line_3.dart';
 export 'package:ditredi/src/model/vertices/poly_line3.dart';
 export 'package:ditredi/src/parser/csv_parser.dart';
 export 'package:ditredi/src/parser/obj_parser.dart';
+export 'package:ditredi/src/controller/ditredi_controller.dart';
 
+/// A widget that displays a 3D objects.
 class DiTreDi extends StatelessWidget {
+  /// List of [Model3D] to display.
   final List<Model3D> figures;
+
+  /// Bounds of the 3D space.
   final Aabb3? bounds;
+
+  /// The [DitrediConfig] to use.
   final DiTreDiConfig config;
+
+  /// The controller to controll the camera.
   final DiTreDiController controller;
 
+  /// Creates a [DiTreDi] widget.
   DiTreDi({
     Key? key,
     required this.figures,
@@ -49,77 +62,22 @@ class DiTreDi extends StatelessWidget {
   }
 }
 
-class DiTreDiConfig {
-  final Color defaultColorMesh;
-  final Color defaultColorPoints;
-  final double defaultPointWidth;
-  final double defaultLineWidth;
-  final bool perspective;
-  final bool supportZIndex;
-
-  const DiTreDiConfig({
-    this.defaultColorMesh = const Color.fromARGB(255, 255, 255, 255),
-    this.defaultColorPoints = const Color.fromARGB(255, 200, 200, 200),
-    this.defaultPointWidth = 1,
-    this.defaultLineWidth = 1,
-    this.perspective = true,
-    this.supportZIndex = true,
-  });
-}
-
-class DiTreDiController extends ChangeNotifier {
-  double modelScale;
-  double viewScale;
-  double userScale;
-  double rotationX;
-  double rotationY;
-  double rotationZ;
-  Offset translation;
-  Vector3 light;
-
-  DiTreDiController({
-    this.modelScale = 1,
-    this.viewScale = 1,
-    this.userScale = 1,
-    this.rotationX = -45,
-    this.rotationY = 45,
-    this.rotationZ = 0,
-    this.translation = const Offset(0, 0),
-    Vector3? light,
-  }) : light = light ?? Vector3(10, -20, 20).normalized();
-
-  void update({
-    double? modelScale,
-    double? viewScale,
-    double? userScale,
-    double? rotationX,
-    double? rotationY,
-    double? rotationZ,
-    Offset? translation,
-    Vector3? light,
-  }) {
-    this.modelScale = modelScale ?? this.modelScale;
-    this.viewScale = viewScale ?? this.viewScale;
-    this.userScale = userScale ?? this.userScale;
-    this.rotationX = rotationX ?? this.rotationX;
-    this.rotationY = rotationY ?? this.rotationY;
-    this.rotationZ = rotationZ ?? this.rotationZ;
-    this.translation = translation ?? this.translation;
-    if (light != null) {
-      light.normalizeInto(this.light);
-    }
-    notifyListeners();
-  }
-
-  double get scale => modelScale * viewScale * userScale;
-}
-
+/// A widget that controls the [DiTreDi] camera with gestures.
 class DiTreDiDraggable extends StatefulWidget {
+  /// The [DiTreDiController] to control.
+  /// Should be the same as the one used in the [DiTreDi] widget.
   final DiTreDiController controller;
+
+  /// The [DiTreDi] widget or its container.
   final Widget child;
+
+  /// If true, the camera will be rotated with the finger.
   final bool rotationEnabled;
+
+  /// If true, the zoom will be changed with the mouse scroll.
   final bool scaleEnabled;
 
+  /// Creates a [DiTreDiDraggable] widget.
   const DiTreDiDraggable({
     Key? key,
     required this.controller,

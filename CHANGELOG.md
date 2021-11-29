@@ -1,3 +1,7 @@
+## 0.0.9
+
+* Improved documentation and code samples.
+
 ## 0.0.8
 
 * Add `copyWith` to `Point3D`.

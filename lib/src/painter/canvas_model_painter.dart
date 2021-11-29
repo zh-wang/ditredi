@@ -8,11 +8,13 @@ import 'package:ditredi/ditredi.dart';
 import 'package:flutter/widgets.dart';
 import 'package:vector_math/vector_math_64.dart';
 
+/// Draws a [DiTreDi] data on a [Canvas].
+/// Shouldn't be used directly, use [DiTreDi] instead.
 class CanvasModelPainter extends CustomPainter {
   static const _dimension = 2;
   var _isDirty = true;
   final DiTreDiController _controller;
-  Aabb3 bounds = Aabb3();
+  Aabb3 _bounds = Aabb3();
 
   final List<Model3D<dynamic>> _figures;
 
@@ -26,6 +28,7 @@ class CanvasModelPainter extends CustomPainter {
   final Paint _vPaint = Paint()..isAntiAlias = true;
   final DiTreDiConfig _config;
 
+  /// Creates a [CanvasModelPainter].
   CanvasModelPainter(
     this._figures,
     Aabb3? bounds,
@@ -73,9 +76,9 @@ class CanvasModelPainter extends CustomPainter {
     final rotationY = _degreeToRadians(_controller.rotationY);
     final rotationZ = _degreeToRadians(_controller.rotationZ);
 
-    final dx = bounds.center.x;
-    final dy = bounds.center.y;
-    final dz = bounds.center.z;
+    final dx = _bounds.center.x;
+    final dy = _bounds.center.y;
+    final dz = _bounds.center.z;
 
     final scale = _controller.scale;
 
@@ -185,7 +188,7 @@ class CanvasModelPainter extends CustomPainter {
     double spreadZ = bounds.max.z - bounds.min.z;
     _controller.modelScale = 1 / max(spreadX, max(spreadY, spreadZ));
 
-    this.bounds = bounds;
+    _bounds = bounds;
   }
 
   double _degreeToRadians(double degree) {

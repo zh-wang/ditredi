@@ -1,6 +1,6 @@
 ![Splash](test/paint/golden/splash.png)
 
-DiTreDi
+DiTreDi _(D3D)_
 ===========
 
 A flutter package that displays large 3D datasets on a transparent canvas.
@@ -13,9 +13,11 @@ A flutter package that displays large 3D datasets on a transparent canvas.
 
 DiTreDi was created to efficiently display datasets and meshes in 3D space. It wasn't intended to create a 3D game engine and is rather useful for displaying static meshes.
 
+DiTreDi name comes from _The 3D_ and _Di Trevi_.
+
 ## Table of Contents
 
-- [DiTreDi](#ditredi)
+- [DiTreDi _(D3D)_](#ditredi-d3d)
   - [Preface](#preface)
   - [Table of Contents](#table-of-contents)
   - [Getting started](#getting-started)
@@ -39,7 +41,7 @@ DiTreDi was created to efficiently display datasets and meshes in 3D space. It w
 
 [Install package](https://pub.dev/packages/ditredi/install).
 
-Add imports for `ditredi` and `vector_math`:
+Add imports for `ditredi` and `vector_math_64`:
 
 ```dart
 import 'package:ditredi/ditredi.dart';
@@ -56,7 +58,7 @@ DiTreDi(
 )
 ```
 
-And voilà, single cube will be displayed:
+And voilà, a single cube will be displayed:
 
 ![Cube3D](test/paint/golden/cube/default.png)
 
@@ -66,7 +68,7 @@ And voilà, single cube will be displayed:
 
 `DiTreDiController` controls a scene rotation, scale, light.
 
-To setup controller, keep its reference in a state and pass to `controller` parameter.
+To set up a controller, keep its reference in a state and pass to the `controller` parameter.
 
 ```dart
 // in a state
@@ -218,9 +220,9 @@ DiTreDi(
 
 A mesh made of faces (triangles).
 You could use `ObjParser` to load it from .obj file contents.
-Currently only material (mtl) as colors are supported.
+Currently, only material (mtl) as colors are supported.
 
-Load from string:
+Load from a string obj content:
 
 ```dart
 DiTreDi(
@@ -230,7 +232,7 @@ DiTreDi(
 )
 ```
 
-Load from flutter resources:
+Load from a flutter resource:
 
 ```dart
 DiTreDi(
@@ -240,7 +242,7 @@ DiTreDi(
 )
 ```
 
-Load from file:
+Load from a file:
 
 ```dart
 DiTreDi(
@@ -255,7 +257,7 @@ DiTreDi(
 
 ### Plane3D
 
-Plane facing x, y or z axis.
+A plane facing x (left/right), y (bottom/up) or z (near/far) axis.
 
 ```dart
 DiTreDi(
@@ -283,7 +285,7 @@ DiTreDi(
 
 ### PointPlane3D
 
-Plane made of points (e.g. to show an object) scale.
+A plane made of points (e.g. to show an object) scale.
 
 ```dart
 DiTreDi(
@@ -300,7 +302,7 @@ DiTreDi(
 
 ### Points and wireframes
 
-Each figure could be transformed to points or lines (wireframe).
+Each figure could be changed to points or lines (wireframe).
 
 ```dart
 DiTreDi(
@@ -322,7 +324,7 @@ DiTreDi(
 
 ### Matrix transformation
 
-Figures might be rotated, translated and scaled with `TransformModifier3D` and `Matrix4`.
+Figures might be rotated, translated, and scaled with `TransformModifier3D` and `Matrix4`.
 
 Each transformation is made for `0,0,0` coordinates.
 
@@ -341,7 +343,7 @@ DiTreDi(
 
 ![Transformation](test/paint/golden/modifier_3d/transformation.png)
 
-To rotate figure around its "own" position, you must translate, rotate and translate back.
+To rotate the figure around its "own" position, you must translate, rotate and translate back.
 
 ```dart
 DiTreDi(
@@ -360,7 +362,7 @@ DiTreDi(
 
 ![Transformation](test/paint/golden/modifier_3d/self_rotation.png)
 
-Transform `Group3D` to apply matrix to each figure.
+Transform `Group3D` to apply a matrix to each figure.
 
 ```dart
 DiTreDi(

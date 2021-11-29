@@ -3,13 +3,24 @@ import 'dart:ui';
 import 'package:ditredi/ditredi.dart';
 import 'package:vector_math/vector_math_64.dart';
 
+/// A plane.
 class Plane3D extends Group3D {
+  /// Facing axis (x to left/right, y to up/down, z to far/near).
   final Axis3D axis;
+
+  /// If true, the plane is facing the camera in a standard rotation.
   final bool negative;
+
+  /// Size of the plane.
   final double size;
+
+  /// Center of the plane.
   final Vector3 position;
+
+  /// Color of the plane. Defaults to [DiTreDiConfig] setting.
   final Color? color;
 
+  /// Creates a new [Plane3D].
   Plane3D(this.size, this.axis, this.negative, this.position, {this.color})
       : super(_getFigures(size, axis, negative, position, color));
 

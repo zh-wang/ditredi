@@ -1,15 +1,18 @@
 import 'package:ditredi/ditredi.dart';
 import 'package:vector_math/vector_math_64.dart';
 
+/// Extensions for [Plane].
 extension PlaneExtensions on Plane {
-  Vector3? intersectionWithLine(Vector3 v1, Vector3 v2) {
-    return _getPlaneLineIntersection(this, v1, v2);
+  /// Returns [Plane] intersection with a given line (from [a] to [b]).
+  Vector3? intersectionWithLine(Vector3 a, Vector3 b) {
+    return _getPlaneLineIntersection(this, a, b);
   }
 
-  Set<Line3> intersectionWithTriangle(Triangle t) {
-    final a = intersectionWithLine(t.point0, t.point1);
-    final b = intersectionWithLine(t.point1, t.point2);
-    final c = intersectionWithLine(t.point2, t.point0);
+  /// Returns [Plane] intersection with a given [triangle].
+  Set<Line3> intersectionWithTriangle(Triangle triangle) {
+    final a = intersectionWithLine(triangle.point0, triangle.point1);
+    final b = intersectionWithLine(triangle.point1, triangle.point2);
+    final c = intersectionWithLine(triangle.point2, triangle.point0);
     final result = {
       if (a != null && b != null) Line3(a, b),
       if (a != null && c != null) Line3(a, c),
@@ -19,13 +22,17 @@ extension PlaneExtensions on Plane {
   }
 }
 
+/// Extensions for [Triangle].
 extension TriangleExtensions on Triangle {
+  /// Returns [Triangle] intersection with a given [plane].
   Set<Line3> intersectionWithPlane(Plane p) {
     return p.intersectionWithTriangle(this);
   }
 }
 
+/// Extensions for [Line3].
 extension LineExtensions on List<Line3> {
+  /// Joins list of [Line3] to a single [PolyLine3].
   List<PolyLine3> joinToPolyLine() {
     final polys = <PolyLine3>{};
     for (var l in this) {
@@ -92,6 +99,7 @@ extension LineExtensions on List<Line3> {
     return polys.toList();
   }
 
+  /// Smooths [Line3] using bezier smoothing algorithm.
   List<Line3> bezierSmooth() {
     if (length <= 1) return this;
     const smooth = 0.1;
@@ -117,7 +125,7 @@ extension LineExtensions on List<Line3> {
 
       final lines = [0.0, 0.3, 0.6, 1.0];
       lines
-          .map((e) => bezier4(currentA, controlA, controlB, currentB, e))
+          .map((e) => _bezier4(currentA, controlA, controlB, currentB, e))
           .toList()
           .windowedWithStep(2, 1)
           .map((e) => Line3(e.elementAt(0), e.elementAt(1)))
@@ -127,25 +135,7 @@ extension LineExtensions on List<Line3> {
     return result;
   }
 
-  Vector3 bezier3(Vector3 av, Vector3 bv, Vector3 cv, double t) {
-    final t2 = t * t;
-    final mt = 1.0 - t;
-    final mt2 = mt * mt;
-
-    final a = mt2;
-    final b = 2.0 * mt * t;
-    final c = t2;
-
-    final point = Vector3.copy(av);
-    point.scale(a);
-    point.addScaled(bv, b);
-    point.addScaled(cv, c);
-    point.y = av.y;
-
-    return point;
-  }
-
-  Vector3 bezier4(Vector3 av, Vector3 bv, Vector3 cv, Vector3 dv, double t) {
+  Vector3 _bezier4(Vector3 av, Vector3 bv, Vector3 cv, Vector3 dv, double t) {
     final t2 = t * t;
     final mt = 1.0 - t;
     final mt2 = mt * mt;
