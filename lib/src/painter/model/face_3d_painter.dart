@@ -64,20 +64,13 @@ mixin Face3DPainter implements Model3DPainter<Face3D> {
       DiTreDiController controller, Triangle t) {
     final color = model.color ?? config.defaultColorMesh;
     _normalVector3(t.point0, t.point1, t.point2, _jnv);
-    final p = (_jnv.dot(controller.light) * controller.lightStrength +
-            controller.ambientLightStrength)
-        .clamp(0, 1);
+    final p = (_jnv.dot(controller.light) * controller.lightStrength)
+        .clamp(controller.ambientLightStrength, 1);
     return Color.fromARGB(
       255,
-      (color.red.toDouble() * p + controller.ambientLightStrength * 255.0)
-          .round()
-          .clamp(0, 255),
-      (color.green.toDouble() * p + controller.ambientLightStrength * 255.0)
-          .round()
-          .clamp(0, 255),
-      (color.blue.toDouble() * p + controller.ambientLightStrength * 255.0)
-          .round()
-          .clamp(0, 255),
+      (color.red.toDouble() * p).round().clamp(0, 255),
+      (color.green.toDouble() * p).round().clamp(0, 255),
+      (color.blue.toDouble() * p).round().clamp(0, 255),
     ).value;
   }
 

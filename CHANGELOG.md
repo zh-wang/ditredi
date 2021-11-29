@@ -1,3 +1,7 @@
+## 0.1.2
+
+* Improve ambient light.
+
 ## 0.1.1
 
 * Add `copyWith` to all models.
