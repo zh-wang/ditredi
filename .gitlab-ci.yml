@@ -52,6 +52,7 @@ build:example:
     - flutter analyze --no-fatal-infos .
     - flutter test
     - flutter pub global activate pana
+    - export PATH="$PATH":"/builds/jelenski/ditredi/.pub-cache/bin"
     - pana --no-warning --exit-code-threshold 120
     - cd "$CI_PROJECT_DIR/example/"
     - export VERSION=$(git describe --tags --always)
