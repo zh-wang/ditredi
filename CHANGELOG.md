@@ -1,3 +1,7 @@
+## 0.1.0
+
+* Fix `dart:io` import making web incompatible.
+  
 ## 0.0.9
 
 * Improved documentation and code samples.
