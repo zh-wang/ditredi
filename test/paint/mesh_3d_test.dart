@@ -117,8 +117,8 @@ Future<Mesh3D> _getPolytree() async => _getObjModel("lowpolytree.obj");
 Future<List<Point3D>> _getTerrainCsv() async => _getCsv("terrain.csv");
 
 Future<Mesh3D> _getObjModel(String filename) async {
-  final file = File("${_getCurrentDir()}/../assets/$filename");
-  final faces = await ObjParser().loadFromFile(file);
+  final faces = await ObjParser()
+      .loadFromFile(Uri.parse("${_getCurrentDir()}/../assets/$filename"));
   return Mesh3D(faces);
 }
 

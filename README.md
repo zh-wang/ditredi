@@ -1,6 +1,6 @@
 ![Splash](test/paint/golden/splash.png)
 
-DiTreDi _(D3D)_
+DiTreDi (D3D)
 ===========
 
 A flutter package that displays large 3D datasets on a transparent canvas.
@@ -13,11 +13,9 @@ A flutter package that displays large 3D datasets on a transparent canvas.
 
 DiTreDi was created to efficiently display datasets and meshes in 3D space. It wasn't intended to create a 3D game engine and is rather useful for displaying static meshes.
 
-DiTreDi name comes from _The 3D_ and _Di Trevi_.
-
 ## Table of Contents
 
-- [DiTreDi _(D3D)_](#ditredi-d3d)
+- [DiTreDi (D3D)](#ditredi-d3d)
   - [Preface](#preface)
   - [Table of Contents](#table-of-contents)
   - [Getting started](#getting-started)
@@ -220,7 +218,7 @@ DiTreDi(
 
 A mesh made of faces (triangles).
 You could use `ObjParser` to load it from .obj file contents.
-Currently, only material (mtl) as colors are supported.
+Currently, only material (mtl) as colours are supported.
 
 Load from a string obj content:
 
@@ -247,7 +245,7 @@ Load from a file:
 ```dart
 DiTreDi(
     figures: [
-        Mesh3D(await ObjParser().loadFromFile(File("files/model.obj")));
+        Mesh3D(await ObjParser().loadFromFile(Uri.parse("files/model.obj")));
     ],
 )
 ```
