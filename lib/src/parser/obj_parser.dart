@@ -6,7 +6,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:vector_math/vector_math_64.dart';
 import 'package:ditredi/src/parser/file/file_loader.dart'
     if (dart.library.io) 'package:ditredi/src/parser/file/file_loader_io.dart'
-    if (dart.library.js) 'package:ditredi/src/parser/file/file_loader_web.dart';
+    if (dart.library.html) 'package:ditredi/src/parser/file/file_loader_web.dart';
 
 /// Parser for Wavefront .obj files.
 class ObjParser {
