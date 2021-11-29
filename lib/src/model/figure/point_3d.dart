@@ -21,6 +21,14 @@ class Point3D with Point3DPainter implements Model3D<Point3D> {
     return Point3D(position.clone(), width: width, color: color);
   }
 
+  Point3D copyWith({Vector3? position, double? width, Color? color}) {
+    return Point3D(
+      position ?? this.position,
+      width: width ?? this.width,
+      color: color ?? this.color,
+    );
+  }
+
   @override
   List<Line3D> toLines() {
     return [];
