@@ -1,3 +1,8 @@
+## 0.1.1
+
+* Add `copyWith` to all models.
+* Ambient light support.
+
 ## 0.1.0
 
 * Fix `dart:io` import making web incompatible.

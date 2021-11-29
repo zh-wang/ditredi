@@ -9,9 +9,9 @@ mixin Group3DPainter implements Model3DPainter<Group3D> {
   @override
   void paint(
       DiTreDiConfig config,
+      DiTreDiController controller,
       Group3D model,
       Matrix4 matrix,
-      Vector3 normalizedLight,
       int vertexIndex,
       Float32List zIndices,
       Int32List colors,
@@ -20,9 +20,9 @@ mixin Group3DPainter implements Model3DPainter<Group3D> {
     for (var figure in model.figures) {
       figure.paint(
         config,
+        controller,
         figure,
         matrix,
-        normalizedLight,
         vertexIndex + counter,
         zIndices,
         colors,

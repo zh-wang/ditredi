@@ -34,6 +34,25 @@ class PointPlane3D extends Group3D {
     this.pointWidth,
   }) : super(_generateFigures(size, gap, axis, position, color, pointWidth));
 
+  /// Copies the plane.
+  PointPlane3D copyWith({
+    Axis3D? axis,
+    double? size,
+    double? gap,
+    Vector3? position,
+    Color? color,
+    double? pointWidth,
+  }) {
+    return PointPlane3D(
+      size ?? this.size,
+      axis ?? this.axis,
+      gap ?? this.gap,
+      position ?? this.position,
+      color: color ?? this.color,
+      pointWidth: pointWidth ?? this.pointWidth,
+    );
+  }
+
   @override
   PointPlane3D clone() {
     return PointPlane3D(

@@ -13,9 +13,9 @@ abstract class Model3DPainter<T extends Model3D<T>> {
   /// Fills the buffer with the [Model3D] data.
   void paint(
     DiTreDiConfig config,
+    DiTreDiController controller,
     T model,
     Matrix4 matrix,
-    Vector3 normalizedLight,
     int vertexIndex,
     Float32List zIndices,
     Int32List colors,

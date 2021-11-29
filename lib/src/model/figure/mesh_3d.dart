@@ -10,6 +10,11 @@ class Mesh3D extends Group3D {
     this.faces,
   ) : super(faces);
 
+  /// Copies the mesh.
+  Mesh3D copyWith({List<Face3D>? faces}) {
+    return Mesh3D(faces ?? this.faces);
+  }
+
   @override
   Mesh3D clone() {
     return Mesh3D(

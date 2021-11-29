@@ -27,6 +27,14 @@ class Face3D with Face3DPainter implements Model3D<Face3D> {
     return Face3D(Triangle.points(a, b, c), color: color);
   }
 
+  /// Copies the face.
+  Face3D copyWith({
+    Triangle? triangle,
+    Color? color,
+  }) {
+    return Face3D(triangle ?? this.triangle, color: color ?? this.color);
+  }
+
   @override
   int verticesCount() {
     return 3;

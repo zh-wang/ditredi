@@ -13,9 +13,9 @@ mixin Line3DPainter implements Model3DPainter<Line3D> {
   @override
   void paint(
       DiTreDiConfig config,
+      DiTreDiController controller,
       Line3D model,
       Matrix4 matrix,
-      Vector3 normalizedLight,
       int vertexIndex,
       Float32List zIndices,
       Int32List colors,

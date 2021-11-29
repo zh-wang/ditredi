@@ -24,6 +24,23 @@ class Plane3D extends Group3D {
   Plane3D(this.size, this.axis, this.negative, this.position, {this.color})
       : super(_getFigures(size, axis, negative, position, color));
 
+  /// Copies the plane.
+  Plane3D copyWith({
+    Axis3D? axis,
+    bool? negative,
+    double? size,
+    Vector3? position,
+    Color? color,
+  }) {
+    return Plane3D(
+      size ?? this.size,
+      axis ?? this.axis,
+      negative ?? this.negative,
+      position ?? this.position,
+      color: color ?? this.color,
+    );
+  }
+
   @override
   Plane3D clone() {
     return Plane3D(size, axis, negative, position, color: color);

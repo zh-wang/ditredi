@@ -29,6 +29,16 @@ class DiTreDiController extends ChangeNotifier {
   /// Light direction for 3D objects.
   Vector3 light;
 
+  /// [light] strength.
+  /// Varies from 0.0 to 1.0.
+  /// Defaults to 1.0.
+  double lightStrength;
+
+  /// Ambient light strength.
+  /// Varies from 0.0 to 1.0.
+  /// Defaults to 0.1.
+  double ambientLightStrength;
+
   /// Creates a new [DiTreDiController] instance.
   DiTreDiController({
     this.modelScale = 1,
@@ -39,7 +49,14 @@ class DiTreDiController extends ChangeNotifier {
     this.rotationZ = 0,
     this.translation = const Offset(0, 0),
     Vector3? light,
-  }) : light = light ?? Vector3(10, -20, 20).normalized();
+    this.lightStrength = 1.0,
+    this.ambientLightStrength = 0.1,
+  }) : light = light ?? Vector3(10, -20, 20).normalized() {
+    assert(
+      ambientLightStrength >= 0 && ambientLightStrength <= 1,
+      "ambientLight should be between 0.0 and 1.0",
+    );
+  }
 
   /// Updates controller and notifies listeners (including [DiTreDi] widget).
   void update({
@@ -50,6 +67,8 @@ class DiTreDiController extends ChangeNotifier {
     double? rotationZ,
     Offset? translation,
     Vector3? light,
+    double? lightStrength,
+    double? ambientLightStrength,
   }) {
     this.viewScale = viewScale ?? this.viewScale;
     this.userScale = userScale ?? this.userScale;
@@ -57,6 +76,10 @@ class DiTreDiController extends ChangeNotifier {
     this.rotationY = rotationY ?? this.rotationY;
     this.rotationZ = rotationZ ?? this.rotationZ;
     this.translation = translation ?? this.translation;
+    this.lightStrength =
+        lightStrength?.clamp(0, double.infinity) ?? this.lightStrength;
+    this.ambientLightStrength =
+        ambientLightStrength?.clamp(0, 1) ?? this.ambientLightStrength;
     if (light != null) {
       light.normalizeInto(this.light);
     }

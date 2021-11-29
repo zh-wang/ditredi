@@ -52,11 +52,13 @@ void main() {
   });
 
   diTreDiDrawTest('mesh_3d/terrain.png', (tester, controller) async {
+    controller.update(ambientLightStrength: 0.0);
     final mesh = await _getTerrain();
     await tester.pumpWidget(DiTreDi(figures: [mesh], controller: controller));
   });
 
   diTreDiDrawTest('mesh_3d/terrain_ortho.png', (tester, controller) async {
+    controller.update(ambientLightStrength: 0.0);
     final mesh = await _getTerrain();
     await tester.pumpWidget(DiTreDi(
       figures: [mesh],
@@ -66,6 +68,7 @@ void main() {
   });
 
   diTreDiDrawTest('mesh_3d/terrain_color.png', (tester, controller) async {
+    controller.update(ambientLightStrength: 0.0);
     final mesh = await _getTerrain();
     await tester.pumpWidget(DiTreDi(
       figures: [mesh],
@@ -103,6 +106,7 @@ void main() {
   });
 
   diTreDiDrawTest('mesh_3d/lowpolytree.png', (tester, controller) async {
+    controller.update(ambientLightStrength: 0.1, lightStrength: 1);
     final mesh = await _getPolytree();
     await tester.pumpWidget(DiTreDi(figures: [mesh], controller: controller));
   });

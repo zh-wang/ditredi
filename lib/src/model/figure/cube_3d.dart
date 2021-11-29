@@ -50,6 +50,19 @@ class Cube3D extends Group3D {
     return Cube3D(size, position);
   }
 
+  /// Copies the cube.
+  Cube3D copyWith({
+    double? size,
+    Vector3? position,
+    Color? color,
+  }) {
+    return Cube3D(
+      size ?? this.size,
+      position ?? this.position,
+      color: color ?? this.color,
+    );
+  }
+
   @override
   int get hashCode => Object.hash(size, position, color);
 

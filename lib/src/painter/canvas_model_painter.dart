@@ -101,9 +101,9 @@ class CanvasModelPainter extends CustomPainter {
       final figure = _figures[i];
       figure.paint(
         _config,
+        _controller,
         figure,
         _matrix,
-        _controller.light,
         vertexIndex,
         _zIndex,
         _colorsToDraw,

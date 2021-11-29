@@ -16,9 +16,9 @@ mixin Face3DPainter implements Model3DPainter<Face3D> {
   @override
   void paint(
       DiTreDiConfig config,
+      DiTreDiController controller,
       Face3D model,
       Matrix4 matrix,
-      Vector3 normalizedLight,
       int vertexIndex,
       Float32List zIndices,
       Int32List colors,
@@ -34,7 +34,7 @@ mixin Face3DPainter implements Model3DPainter<Face3D> {
           (_t.point0.z + _t.point1.z + _t.point2.z) / 3;
 
       // color
-      final originColor = _getFaceColor(model, config, normalizedLight, _t);
+      final originColor = _getFaceColor(model, config, controller, _t);
       colors[vertexIndex + 0] = originColor;
       colors[vertexIndex + 1] = originColor;
       colors[vertexIndex + 2] = originColor;
@@ -60,16 +60,24 @@ mixin Face3DPainter implements Model3DPainter<Face3D> {
         0.0;
   }
 
-  int _getFaceColor(
-      Face3D model, DiTreDiConfig config, Vector3 light, Triangle t) {
+  int _getFaceColor(Face3D model, DiTreDiConfig config,
+      DiTreDiController controller, Triangle t) {
     final color = model.color ?? config.defaultColorMesh;
     _normalVector3(t.point0, t.point1, t.point2, _jnv);
-    final p = _jnv.dot(light).clamp(0, 1);
+    final p = (_jnv.dot(controller.light) * controller.lightStrength +
+            controller.ambientLightStrength)
+        .clamp(0, 1);
     return Color.fromARGB(
       255,
-      (color.red.toDouble() * p).round(),
-      (color.green.toDouble() * p).round(),
-      (color.blue.toDouble() * p).round(),
+      (color.red.toDouble() * p + controller.ambientLightStrength * 255.0)
+          .round()
+          .clamp(0, 255),
+      (color.green.toDouble() * p + controller.ambientLightStrength * 255.0)
+          .round()
+          .clamp(0, 255),
+      (color.blue.toDouble() * p + controller.ambientLightStrength * 255.0)
+          .round()
+          .clamp(0, 255),
     ).value;
   }
 

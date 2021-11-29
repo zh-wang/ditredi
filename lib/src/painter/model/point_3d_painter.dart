@@ -11,9 +11,9 @@ mixin Point3DPainter implements Model3DPainter<Point3D> {
   @override
   void paint(
       DiTreDiConfig config,
+      DiTreDiController controller,
       Point3D model,
       Matrix4 matrix,
-      Vector3 normalizedLight,
       int vertexIndex,
       Float32List zIndices,
       Int32List colors,

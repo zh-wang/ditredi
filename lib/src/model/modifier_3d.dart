@@ -34,18 +34,18 @@ abstract class Modifier3D implements Model3D<Modifier3D> {
   @override
   void paint(
       DiTreDiConfig config,
+      DiTreDiController controller,
       Model3D model,
       Matrix4 matrix,
-      Vector3 normalizedLight,
       int vertexIndex,
       Float32List zIndices,
       Int32List colors,
       Float32List vertices) {
     figure.paint(
       config,
+      controller,
       model,
       matrix,
-      normalizedLight,
       vertexIndex,
       zIndices,
       colors,
@@ -73,16 +73,24 @@ class TransformModifier3D extends Modifier3D {
   @override
   void paint(
       DiTreDiConfig config,
+      DiTreDiController controller,
       Model3D model,
       Matrix4 matrix,
-      Vector3 normalizedLight,
       int vertexIndex,
       Float32List zIndices,
       Int32List colors,
       Float32List vertices) {
     _tmp.setFrom(matrix);
     _tmp.multiply(transformation);
-    figure.paint(config, figure, _tmp, normalizedLight, vertexIndex, zIndices,
-        colors, vertices);
+    figure.paint(
+      config,
+      controller,
+      figure,
+      _tmp,
+      vertexIndex,
+      zIndices,
+      colors,
+      vertices,
+    );
   }
 }

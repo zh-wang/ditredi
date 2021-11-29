@@ -9,7 +9,11 @@ void main() {
 class MyApp extends StatelessWidget {
   MyApp({Key? key}) : super(key: key);
 
-  final aController = DiTreDiController(rotationX: -20, rotationY: 30);
+  final aController = DiTreDiController(
+    rotationX: -20,
+    rotationY: 30,
+    light: vector.Vector3(-0.5, -0.5, 0.5),
+  );
   final bController = DiTreDiController(rotationX: -20, rotationY: 30);
   final cController = DiTreDiController(rotationX: -20, rotationY: 30);
 
@@ -103,25 +107,28 @@ class MyApp extends StatelessWidget {
 
 Iterable<Cube3D> _generateCubes() sync* {
   final colors = [
-    Colors.red,
-    Colors.green,
-    Colors.blue,
-    Colors.yellow,
-    Colors.orange,
-    Colors.purple,
+    Colors.grey.shade200,
+    Colors.grey.shade300,
+    Colors.grey.shade400,
+    Colors.grey.shade500,
+    Colors.grey.shade600,
+    Colors.grey.shade700,
+    Colors.grey.shade800,
+    Colors.grey.shade900,
   ];
 
-  for (var x = 0; x < 10; x++) {
-    for (var y = 0; y < 10; y++) {
-      for (var z = 0; z < 10; z++) {
+  const count = 8;
+  for (var x = count; x > 0; x--) {
+    for (var y = count; y > 0; y--) {
+      for (var z = count; z > 0; z--) {
         yield Cube3D(
-          0.5,
+          0.9,
           vector.Vector3(
             x.toDouble() * 2,
             y.toDouble() * 2,
             z.toDouble() * 2,
           ),
-          color: colors[(x + y + z) % colors.length],
+          color: colors[(colors.length - y) % colors.length],
         );
       }
     }
