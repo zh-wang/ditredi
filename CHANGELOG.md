@@ -1,3 +1,7 @@
+## 0.0.8
+
+* Add `copyWith` to `Point3D`.
+
 ## 0.0.7
 
 * Improved obj file support thanks to @bennibau.
