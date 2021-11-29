@@ -51,6 +51,8 @@ build:example:
     - flutter pub get
     - flutter analyze --no-fatal-infos .
     - flutter test
+    - flutter pub global activate pana
+    - pana --no-warning --exit-code-threshold 120
     - cd "$CI_PROJECT_DIR/example/"
     - export VERSION=$(git describe --tags --always)
     - flutter build web --release --web-renderer canvaskit --dart-define=BASE_URL="https://jelenski.gitlab.io" --dart-define=VERSION_TAG="$VERSION" --base-href="/ditredi/"
