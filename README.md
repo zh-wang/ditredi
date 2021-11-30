@@ -289,7 +289,7 @@ A plane made of points (e.g. to show an object) scale.
 DiTreDi(
     figures: [
       PointPlane3D(1, Axis3D.y, 0.1, Vector3(0, 0, 0), pointWidth: 5),
-      Cube3D(0.5, Vector3(0, 0, 0)),
+      Cube3D(0.1, Vector3(0, 0, 0)),
     ],
 )
 ```

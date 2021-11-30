@@ -20,7 +20,7 @@ void main() {
   diTreDiDrawTest('point_plane_3d/bold.png', (tester, controller) async {
     await tester.pumpWidget(DiTreDi(figures: [
       PointPlane3D(1, Axis3D.y, 0.1, Vector3(0, 0, 0), pointWidth: 5),
-      Cube3D(0.1, Vector3(0, 0.1, 0)),
+      Cube3D(0.1, Vector3(0, 0, 0)),
     ], controller: controller));
   });
 }
