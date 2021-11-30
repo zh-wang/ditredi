@@ -36,6 +36,7 @@ class DiTreDiController extends ChangeNotifier {
 
   /// Ambient light strength.
   /// Varies from 0.0 to 1.0.
+  /// Set to 1.0 to use colors without light effect.
   /// Defaults to 0.1.
   double ambientLightStrength;
 

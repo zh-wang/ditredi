@@ -1,5 +1,6 @@
 import 'package:ditredi/ditredi.dart';
 import 'package:vector_math/vector_math_64.dart';
+import 'package:flutter/material.dart' as m;
 
 import '../extensions.dart';
 
@@ -7,6 +8,13 @@ void main() {
   diTreDiDrawTest('cube/default.png', (tester, controller) async {
     await tester.pumpWidget(DiTreDi(figures: [
       Cube3D(2, Vector3(0, 0, 0)),
+    ], controller: controller));
+  });
+
+  diTreDiDrawTest('cube/ambient_light.png', (tester, controller) async {
+    controller.update(ambientLightStrength: 1.0);
+    await tester.pumpWidget(DiTreDi(figures: [
+      Cube3D(2, Vector3(0, 0, 0), color: m.Colors.red),
     ], controller: controller));
   });
 
