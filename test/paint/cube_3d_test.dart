@@ -53,6 +53,23 @@ void main() {
     ));
   });
 
+  diTreDiDrawTest('cube/axis.png', (tester, controller) async {
+    await tester.pumpWidget(DiTreDi(
+      figures: [
+        Cube3D(0.5, Vector3(0, 0, 0), color: m.Colors.red),
+        Cube3D(0.5, Vector3(1, 0, 0), color: m.Colors.red),
+        Cube3D(0.5, Vector3(2, 0, 0), color: m.Colors.red),
+        Cube3D(0.5, Vector3(0, 0, 0), color: m.Colors.blue),
+        Cube3D(0.5, Vector3(0, 1, 0), color: m.Colors.blue),
+        Cube3D(0.5, Vector3(0, 2, 0), color: m.Colors.blue),
+        Cube3D(0.5, Vector3(2, 0, 0), color: m.Colors.red),
+        Cube3D(0.5, Vector3(0, 0, 0), color: m.Colors.green),
+        Cube3D(0.5, Vector3(0, 0, 1), color: m.Colors.green),
+        Cube3D(0.5, Vector3(0, 0, 2), color: m.Colors.green),
+      ],
+    ));
+  });
+
   diTreDiDrawTest('cube/large_set.png', (tester, controller) async {
     controller.update(rotationY: 30, rotationX: 0, userScale: 3);
     await tester.pumpWidget(DiTreDi(
