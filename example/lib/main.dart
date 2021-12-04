@@ -26,79 +26,81 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: Scaffold(
-        body: Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 30, 0, 30),
-              child: LayoutBuilder(
-                builder: (_, constraints) {
-                  final cubes = _generateCubes();
-                  return Flex(
-                    direction: constraints.maxWidth < 600
-                        ? Axis.vertical
-                        : Axis.horizontal,
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: DiTreDiDraggable(
-                          controller: aController,
-                          child: DiTreDi(
-                            figures: cubes.toList(),
+        body: SafeArea(
+          child: Stack(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 30, 0, 30),
+                child: LayoutBuilder(
+                  builder: (_, constraints) {
+                    final cubes = _generateCubes();
+                    return Flex(
+                      direction: constraints.maxWidth < 600
+                          ? Axis.vertical
+                          : Axis.horizontal,
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: DiTreDiDraggable(
                             controller: aController,
+                            child: DiTreDi(
+                              figures: cubes.toList(),
+                              controller: aController,
+                            ),
                           ),
                         ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: DiTreDiDraggable(
-                          controller: bController,
-                          child: DiTreDi(
-                            figures: [
-                              ...cubes
-                                  .map((e) => e.toLines())
-                                  .flatten()
-                                  .map((e) => e.copyWith(
-                                      color: Colors.red.withAlpha(20)))
-                                  .toList()
-                            ],
+                        Expanded(
+                          flex: 1,
+                          child: DiTreDiDraggable(
                             controller: bController,
-                            // disable z index to boost drawing performance
-                            // for wireframes and points
-                            config: const DiTreDiConfig(
-                              supportZIndex: false,
+                            child: DiTreDi(
+                              figures: [
+                                ...cubes
+                                    .map((e) => e.toLines())
+                                    .flatten()
+                                    .map((e) => e.copyWith(
+                                        color: Colors.red.withAlpha(20)))
+                                    .toList()
+                              ],
+                              controller: bController,
+                              // disable z index to boost drawing performance
+                              // for wireframes and points
+                              config: const DiTreDiConfig(
+                                supportZIndex: false,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: DiTreDiDraggable(
-                          controller: cController,
-                          child: DiTreDi(
-                            figures: _generatePoints().toList(),
+                        Expanded(
+                          flex: 1,
+                          child: DiTreDiDraggable(
                             controller: cController,
-                            // disable z index to boost drawing performance
-                            // for wireframes and points
-                            config: const DiTreDiConfig(
-                              defaultPointWidth: 2,
-                              supportZIndex: false,
+                            child: DiTreDi(
+                              figures: _generatePoints().toList(),
+                              controller: cController,
+                              // disable z index to boost drawing performance
+                              // for wireframes and points
+                              config: const DiTreDiConfig(
+                                defaultPointWidth: 2,
+                                supportZIndex: false,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
-                  );
-                },
+                      ],
+                    );
+                  },
+                ),
               ),
-            ),
-            const Align(
-              alignment: Alignment.topCenter,
-              child: Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text("Drag to rotate. Scroll to zoom"),
+              const Align(
+                alignment: Alignment.topCenter,
+                child: Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text("Drag to rotate. Scroll to zoom"),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

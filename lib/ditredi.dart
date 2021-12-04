@@ -93,33 +93,13 @@ class DiTreDiDraggable extends StatefulWidget {
 class _DiTreDiDraggableState extends State<DiTreDiDraggable> {
   var _lastX = 0.0;
   var _lastY = 0.0;
-
-  void _updateTap(DragStartDetails data) {
-    _lastX = data.globalPosition.dx;
-    _lastY = data.globalPosition.dy;
-  }
-
-  void _updateCube(DragUpdateDetails data) {
-    final controller = widget.controller;
-    if (!widget.rotationEnabled) return;
-
-    final dx = data.globalPosition.dx - _lastX;
-    final dy = data.globalPosition.dy - _lastY;
-
-    _lastX = data.globalPosition.dx;
-    _lastY = data.globalPosition.dy;
-
-    controller.update(
-      rotationX: (controller.rotationX - dy / 2).clamp(-90, -20),
-      rotationY: ((controller.rotationY - dx / 2 + 360) % 360).clamp(0, 360),
-    );
-  }
+  var _scaleBase = 0.0;
 
   @override
   Widget build(BuildContext context) {
     return Listener(
       onPointerSignal: (pointerSignal) {
-        if (pointerSignal is PointerScrollEvent && widget.scaleEnabled) {
+        if (widget.scaleEnabled && pointerSignal is PointerScrollEvent) {
           final scaledDy =
               pointerSignal.scrollDelta.dy / widget.controller.viewScale;
           widget.controller.update(
@@ -128,8 +108,30 @@ class _DiTreDiDraggableState extends State<DiTreDiDraggable> {
         }
       },
       child: GestureDetector(
-        onPanStart: _updateTap,
-        onPanUpdate: _updateCube,
+        onScaleStart: (data) {
+          _scaleBase = widget.controller.userScale;
+          _lastX = data.localFocalPoint.dx;
+          _lastY = data.localFocalPoint.dy;
+        },
+        onScaleUpdate: (data) {
+          final controller = widget.controller;
+
+          final dx = data.localFocalPoint.dx - _lastX;
+          final dy = data.localFocalPoint.dy - _lastY;
+
+          _lastX = data.localFocalPoint.dx;
+          _lastY = data.localFocalPoint.dy;
+
+          controller.update(
+            userScale: _scaleBase * data.scale,
+            rotationX: widget.rotationEnabled
+                ? (controller.rotationX - dy / 2).clamp(-90, -20)
+                : null,
+            rotationY: widget.rotationEnabled
+                ? ((controller.rotationY - dx / 2 + 360) % 360).clamp(0, 360)
+                : null,
+          );
+        },
         child: widget.child,
       ),
     );

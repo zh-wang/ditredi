@@ -1,3 +1,7 @@
+## 0.1.3
+
+* Support scale gesture.
+
 ## 0.1.2
 
 * Improve ambient light.
