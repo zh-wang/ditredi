@@ -3,19 +3,26 @@ import 'package:flutter/material.dart';
 import 'package:vector_math/vector_math_64.dart' as vector;
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  MyApp({Key? key}) : super(key: key);
+class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
 
-  final aController = DiTreDiController(
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  var _displayMode = DisplayMode.cubes;
+  final _cubes = _generateCubes();
+  final _points = _generatePoints().toList();
+
+  final _controller = DiTreDiController(
     rotationX: -20,
     rotationY: 30,
     light: vector.Vector3(-0.5, -0.5, 0.5),
   );
-  final bController = DiTreDiController(rotationX: -20, rotationY: 30);
-  final cController = DiTreDiController(rotationX: -20, rotationY: 30);
 
   @override
   Widget build(BuildContext context) {
@@ -27,77 +34,81 @@ class MyApp extends StatelessWidget {
       ),
       home: Scaffold(
         body: SafeArea(
-          child: Stack(
+          child: Flex(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            direction: Axis.vertical,
             children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 30, 0, 30),
-                child: LayoutBuilder(
-                  builder: (_, constraints) {
-                    final cubes = _generateCubes();
-                    return Flex(
-                      direction: constraints.maxWidth < 600
-                          ? Axis.vertical
-                          : Axis.horizontal,
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: DiTreDiDraggable(
-                            controller: aController,
-                            child: DiTreDi(
-                              figures: cubes.toList(),
-                              controller: aController,
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: DiTreDiDraggable(
-                            controller: bController,
-                            child: DiTreDi(
-                              figures: [
-                                ...cubes
-                                    .map((e) => e.toLines())
-                                    .flatten()
-                                    .map((e) => e.copyWith(
-                                        color: Colors.red.withAlpha(20)))
-                                    .toList()
-                              ],
-                              controller: bController,
-                              // disable z index to boost drawing performance
-                              // for wireframes and points
-                              config: const DiTreDiConfig(
-                                supportZIndex: false,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: DiTreDiDraggable(
-                            controller: cController,
-                            child: DiTreDi(
-                              figures: _generatePoints().toList(),
-                              controller: cController,
-                              // disable z index to boost drawing performance
-                              // for wireframes and points
-                              config: const DiTreDiConfig(
-                                defaultPointWidth: 2,
-                                supportZIndex: false,
-                              ),
-                            ),
-                          ),
-                        ),
+              if (_displayMode == DisplayMode.cubes)
+                Expanded(
+                  child: DiTreDiDraggable(
+                    controller: _controller,
+                    child: DiTreDi(
+                      figures: _cubes.toList(),
+                      controller: _controller,
+                    ),
+                  ),
+                ),
+              if (_displayMode == DisplayMode.wireframe)
+                Expanded(
+                  child: DiTreDiDraggable(
+                    controller: _controller,
+                    child: DiTreDi(
+                      figures: [
+                        ..._cubes
+                            .map((e) => e.toLines())
+                            .flatten()
+                            .map((e) =>
+                                e.copyWith(color: Colors.red.withAlpha(20)))
+                            .toList()
                       ],
-                    );
-                  },
+                      controller: _controller,
+                      // disable z index to boost drawing performance
+                      // for wireframes and points
+                      config: const DiTreDiConfig(
+                        supportZIndex: false,
+                      ),
+                    ),
+                  ),
                 ),
+              if (_displayMode == DisplayMode.points)
+                Expanded(
+                  child: DiTreDiDraggable(
+                    controller: _controller,
+                    child: DiTreDi(
+                      figures: _points,
+                      controller: _controller,
+                      // disable z index to boost drawing performance
+                      // for wireframes and points
+                      config: const DiTreDiConfig(
+                        defaultPointWidth: 2,
+                        supportZIndex: false,
+                      ),
+                    ),
+                  ),
+                ),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text("Drag to rotate. Scroll to zoom"),
               ),
-              const Align(
-                alignment: Alignment.topCenter,
-                child: Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text("Drag to rotate. Scroll to zoom"),
-                ),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: DisplayMode.values
+                    .map((e) => Material(
+                          child: InkWell(
+                            onTap: () => setState(() => _displayMode = e),
+                            child: ListTile(
+                              title: Text(e.title),
+                              leading: Radio<DisplayMode>(
+                                value: e,
+                                groupValue: _displayMode,
+                                onChanged: (e) => setState(
+                                  () => _displayMode = e ?? DisplayMode.cubes,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ))
+                    .toList(),
               ),
             ],
           ),
@@ -149,6 +160,25 @@ Iterable<Point3D> _generatePoints() sync* {
           ),
         );
       }
+    }
+  }
+}
+
+enum DisplayMode {
+  cubes,
+  wireframe,
+  points,
+}
+
+extension DisplayModeTitle on DisplayMode {
+  String get title {
+    switch (this) {
+      case DisplayMode.cubes:
+        return "Cubes";
+      case DisplayMode.wireframe:
+        return "Wireframe";
+      case DisplayMode.points:
+        return "Points";
     }
   }
 }

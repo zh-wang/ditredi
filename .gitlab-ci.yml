@@ -66,19 +66,6 @@ build:example:
       - example/build/web
     expire_in: 1 day
 
-pub:
-  stage: deploy
-  image: $DOCKER_IMAGE_FLUTTER
-  extends: 
-    - .master-job-template
-    - .with-flutter-pub-cache
-  dependencies:
-    - build:example
-  script:
-    - mkdir "$HOME/.pub-cache" || true
-    - echo "$PUB_CREDENTIALS" | base64 --decode >> "$HOME/.pub-cache/credentials.json"
-    - echo y | flutter pub publish 
-
 pages:
   extends: .master-job-template
   stage: deploy
