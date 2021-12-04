@@ -66,6 +66,16 @@ build:example:
       - example/build/web
     expire_in: 1 day
 
+pub:
+  extends: .master-job-template
+  stage: deploy
+  dependencies:
+    - build:example
+  script:
+    - mkdir "$HOME/.pub-cache" || true
+    - echo "$PUB_CREDENTIALS" | base64 --decode >> "$HOME/.pub-cache/credentials.json"
+    - echo y | flutter pub publish 
+
 pages:
   extends: .master-job-template
   stage: deploy
