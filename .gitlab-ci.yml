@@ -51,8 +51,8 @@ build:example:
     - flutter pub get
     - flutter analyze --no-fatal-infos .
     - flutter test
-    - flutter pub global activate pana
     - export PATH="$PATH":"/builds/jelenski/ditredi/.pub-cache/bin"
+    - flutter pub global activate pana
     - pana --no-warning --exit-code-threshold 120
     - cd "$CI_PROJECT_DIR/example/"
     - export VERSION=$(git describe --tags --always)
@@ -67,8 +67,11 @@ build:example:
     expire_in: 1 day
 
 pub:
-  extends: .master-job-template
   stage: deploy
+  image: $DOCKER_IMAGE_FLUTTER
+  extends: 
+    - .master-job-template
+    - .with-flutter-pub-cache
   dependencies:
     - build:example
   script:
