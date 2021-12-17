@@ -1,3 +1,7 @@
+## 0.1.4
+
+* Fix light constraints.
+
 ## 0.1.3
 
 * Support scale gesture.
