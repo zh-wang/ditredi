@@ -30,7 +30,7 @@ class DiTreDiController extends ChangeNotifier {
   Vector3 light;
 
   /// [light] strength.
-  /// Varies from 0.0 to 1.0.
+  /// Varies from 0.0 to infinity.
   /// Defaults to 1.0.
   double lightStrength;
 
