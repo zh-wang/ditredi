@@ -65,7 +65,7 @@ mixin Face3DPainter implements Model3DPainter<Face3D> {
     final color = model.color ?? config.defaultColorMesh;
     _normalVector3(t.point0, t.point1, t.point2, _jnv);
     final p = (_jnv.dot(controller.light) * controller.lightStrength)
-        .clamp(controller.ambientLightStrength, 1);
+        .clamp(controller.ambientLightStrength, double.infinity);
     return Color.fromARGB(
       255,
       (color.red.toDouble() * p).round().clamp(0, 255),

@@ -4,6 +4,7 @@ import 'package:ditredi/ditredi.dart';
 import 'package:flutter/material.dart' as m;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:stack_trace/stack_trace.dart' as stacktrace;
+import 'package:vector_math/vector_math_64.dart';
 
 import '../extensions.dart';
 
@@ -107,6 +108,19 @@ void main() {
 
   diTreDiDrawTest('mesh_3d/lowpolytree.png', (tester, controller) async {
     controller.update(ambientLightStrength: 0.1, lightStrength: 1);
+    final mesh = await _getPolytree();
+    await tester.pumpWidget(DiTreDi(figures: [mesh], controller: controller));
+  });
+
+  diTreDiDrawTest('mesh_3d/lowpolytree_light.png', (tester, controller) async {
+    controller.update(
+      ambientLightStrength: 0.2,
+      lightStrength: 5,
+      light: Vector3(0, 0, 1),
+      rotationX: -90,
+      rotationY: 0,
+      rotationZ: 0,
+    );
     final mesh = await _getPolytree();
     await tester.pumpWidget(DiTreDi(figures: [mesh], controller: controller));
   });
