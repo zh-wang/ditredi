@@ -14,6 +14,7 @@ abstract class Model3DPainter<T extends Model3D<T>> {
   void paint(
     DiTreDiConfig config,
     DiTreDiController controller,
+    PaintViewPort viewPort,
     T model,
     Matrix4 matrix,
     int vertexIndex,
@@ -21,4 +22,16 @@ abstract class Model3DPainter<T extends Model3D<T>> {
     Int32List colors,
     Float32List vertices,
   );
+}
+
+/// Describes painting ViewPort (ViewPort is a rectangle in the buffer).
+abstract class PaintViewPort {
+  /// Checks if vector is visible in the current viewport.
+  bool isVectorVisible(Vector3 vector);
+
+  /// Checks if line is visible in the current viewport.
+  bool isLineVisible(Vector3 a, Vector3 b);
+
+  /// Checks if triangle is visible in the current viewport.
+  bool isTriangleVisible(Triangle t);
 }

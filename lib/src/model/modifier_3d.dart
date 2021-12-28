@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:ditredi/ditredi.dart';
+import 'package:ditredi/src/painter/model/model_3d_painter.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 /// Modifies drawing of [Model3D] objects.
@@ -35,6 +36,7 @@ abstract class Modifier3D implements Model3D<Modifier3D> {
   void paint(
       DiTreDiConfig config,
       DiTreDiController controller,
+      PaintViewPort viewPort,
       Model3D model,
       Matrix4 matrix,
       int vertexIndex,
@@ -44,6 +46,7 @@ abstract class Modifier3D implements Model3D<Modifier3D> {
     figure.paint(
       config,
       controller,
+      viewPort,
       model,
       matrix,
       vertexIndex,
@@ -74,6 +77,7 @@ class TransformModifier3D extends Modifier3D {
   void paint(
       DiTreDiConfig config,
       DiTreDiController controller,
+      PaintViewPort viewPort,
       Model3D model,
       Matrix4 matrix,
       int vertexIndex,
@@ -85,6 +89,7 @@ class TransformModifier3D extends Modifier3D {
     figure.paint(
       config,
       controller,
+      viewPort,
       figure,
       _tmp,
       vertexIndex,

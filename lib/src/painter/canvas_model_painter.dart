@@ -5,12 +5,13 @@ import 'dart:ui';
 
 import 'package:collection/collection.dart';
 import 'package:ditredi/ditredi.dart';
+import 'package:ditredi/src/painter/model/model_3d_painter.dart';
 import 'package:flutter/widgets.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 /// Draws a [DiTreDi] data on a [Canvas].
 /// Shouldn't be used directly, use [DiTreDi] instead.
-class CanvasModelPainter extends CustomPainter {
+class CanvasModelPainter extends CustomPainter implements PaintViewPort {
   static const _dimension = 2;
   var _isDirty = true;
   final DiTreDiController _controller;
@@ -18,6 +19,8 @@ class CanvasModelPainter extends CustomPainter {
 
   final List<Model3D<dynamic>> _figures;
 
+  var _viewPortWidth = 0.0;
+  var _viewPortHeight = 0.0;
   var _colorsToDraw = Int32List(0);
   var _colorsBuffer = Int32List(0);
   var _verticesToDraw = Float32List(0);
@@ -64,12 +67,12 @@ class CanvasModelPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     canvas.save();
 
-    final viewPortX = size.width;
-    final viewPortY = size.height;
+    _viewPortWidth = size.width / 2;
+    _viewPortHeight = size.height / 2;
 
-    canvas.translate(viewPortX / 2, viewPortY / 2);
+    canvas.translate(_viewPortWidth, _viewPortHeight);
 
-    _controller.viewScale = math.min(viewPortX, viewPortY) / 2;
+    _controller.viewScale = math.min(_viewPortWidth, _viewPortHeight);
     _isDirty = false;
 
     final rotationX = _degreeToRadians(_controller.rotationX);
@@ -102,6 +105,7 @@ class CanvasModelPainter extends CustomPainter {
       figure.paint(
         _config,
         _controller,
+        this,
         figure,
         _matrix,
         vertexIndex,
@@ -193,6 +197,33 @@ class CanvasModelPainter extends CustomPainter {
 
   double _degreeToRadians(double degree) {
     return degree * (math.pi / 180.0);
+  }
+
+  /// Checks if vector is visible in the current viewport.
+  @override
+  bool isVectorVisible(Vector3 vector) {
+    return vector.x >= -_viewPortWidth &&
+        vector.x <= _viewPortWidth &&
+        vector.y >= -_viewPortHeight &&
+        vector.y <= _viewPortHeight;
+  }
+
+  /// Checks if line is visible in the current viewport.
+  @override
+  bool isLineVisible(Vector3 a, Vector3 b) {
+    if (a.x < -_viewPortWidth && b.x < -_viewPortWidth) return false;
+    if (a.x > _viewPortWidth && b.x > _viewPortWidth) return false;
+    if (a.y < -_viewPortHeight && b.y < -_viewPortHeight) return false;
+    if (a.y > _viewPortHeight && b.y > _viewPortHeight) return false;
+    return true;
+  }
+
+  /// Checks if triangle is visible in the current viewport.
+  @override
+  bool isTriangleVisible(Triangle t) {
+    return isLineVisible(t.point0, t.point1) ||
+        isLineVisible(t.point1, t.point2) ||
+        isLineVisible(t.point2, t.point0);
   }
 
   @override

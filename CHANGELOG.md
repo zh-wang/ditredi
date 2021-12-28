@@ -1,3 +1,7 @@
+## 0.1.5
+
+* Performance optimisations - clip invisible figures.
+
 ## 0.1.4
 
 * Fix light constraints.

@@ -10,6 +10,7 @@ mixin Group3DPainter implements Model3DPainter<Group3D> {
   void paint(
       DiTreDiConfig config,
       DiTreDiController controller,
+      PaintViewPort viewPort,
       Group3D model,
       Matrix4 matrix,
       int vertexIndex,
@@ -21,6 +22,7 @@ mixin Group3DPainter implements Model3DPainter<Group3D> {
       figure.paint(
         config,
         controller,
+        viewPort,
         figure,
         matrix,
         vertexIndex + counter,

@@ -17,6 +17,7 @@ mixin Face3DPainter implements Model3DPainter<Face3D> {
   void paint(
       DiTreDiConfig config,
       DiTreDiController controller,
+      PaintViewPort viewPort,
       Face3D model,
       Matrix4 matrix,
       int vertexIndex,
@@ -28,7 +29,7 @@ mixin Face3DPainter implements Model3DPainter<Face3D> {
     matrix.perspectiveTransform(_t.point1);
     matrix.perspectiveTransform(_t.point2);
 
-    if (_shouldDraw(_t)) {
+    if (_shouldDraw(viewPort, _t)) {
       // z-index
       zIndices[vertexIndex ~/ 3] =
           (_t.point0.z + _t.point1.z + _t.point2.z) / 3;
@@ -54,10 +55,11 @@ mixin Face3DPainter implements Model3DPainter<Face3D> {
     vertices[pointIndex + 5] = _t.point2.y;
   }
 
-  bool _shouldDraw(Triangle t) {
+  bool _shouldDraw(PaintViewPort viewPort, Triangle t) {
     return (t.point1.x - t.point0.x) * (t.point2.y - t.point0.y) -
-            (t.point1.y - t.point0.y) * (t.point2.x - t.point0.x) <
-        0.0;
+                (t.point1.y - t.point0.y) * (t.point2.x - t.point0.x) <
+            0.0 &&
+        viewPort.isTriangleVisible(t);
   }
 
   int _getFaceColor(Face3D model, DiTreDiConfig config,
