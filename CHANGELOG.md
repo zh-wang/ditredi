@@ -1,3 +1,7 @@
+## 0.1.8
+
+* Allow scale constraint updates.
+
 ## 0.1.7
 
 * Move scale control to controller.

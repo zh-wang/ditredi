@@ -71,6 +71,8 @@ class DiTreDiController extends ChangeNotifier {
   void update({
     double? viewScale,
     double? userScale,
+    double? minUserScale,
+    double? maxUserScale,
     double? rotationX,
     double? rotationY,
     double? rotationZ,
@@ -79,9 +81,19 @@ class DiTreDiController extends ChangeNotifier {
     double? lightStrength,
     double? ambientLightStrength,
   }) {
+    assert(
+      ambientLightStrength == null ||
+          ambientLightStrength >= 0 && ambientLightStrength <= 1,
+      "ambientLight should be between 0.0 and 1.0",
+    );
+
     this.viewScale = viewScale ?? this.viewScale;
-    this.userScale =
-        (userScale ?? this.userScale).clamp(minUserScale, maxUserScale);
+    this.minUserScale =
+        (minUserScale ?? this.minUserScale).clamp(0, double.infinity);
+    this.maxUserScale = (maxUserScale ?? this.maxUserScale)
+        .clamp(this.minUserScale, double.infinity);
+    this.userScale = (userScale ?? this.userScale)
+        .clamp(this.minUserScale, this.maxUserScale);
     this.rotationX = rotationX ?? this.rotationX;
     this.rotationY = rotationY ?? this.rotationY;
     this.rotationZ = rotationZ ?? this.rotationZ;

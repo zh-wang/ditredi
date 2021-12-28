@@ -11,6 +11,7 @@ void main() {
   diTreDiDrawTest('splash.png', (tester, controller) async {
     controller.update(
       userScale: 10,
+      maxUserScale: 10,
       rotationX: -20,
       rotationY: 30,
       translation: const Offset(80, -0),
