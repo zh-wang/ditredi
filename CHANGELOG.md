@@ -1,3 +1,7 @@
+## 0.1.6
+
+* Min and max scale on draggable widget.
+
 ## 0.1.5
 
 * Performance optimisations - clip invisible figures.

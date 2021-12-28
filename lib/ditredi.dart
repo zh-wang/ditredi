@@ -77,6 +77,12 @@ class DiTreDiDraggable extends StatefulWidget {
   /// If true, the zoom will be changed with the mouse scroll.
   final bool scaleEnabled;
 
+  /// Min scale. Applied only when [scaleEnabled] is true.
+  final double minScale = 0.8;
+
+  /// Max scale. Applied only when [scaleEnabled] is true.
+  final double maxScale = 3.0;
+
   /// Creates a [DiTreDiDraggable] widget.
   const DiTreDiDraggable({
     Key? key,
@@ -103,7 +109,8 @@ class _DiTreDiDraggableState extends State<DiTreDiDraggable> {
           final scaledDy =
               pointerSignal.scrollDelta.dy / widget.controller.viewScale;
           widget.controller.update(
-            userScale: (widget.controller.userScale - scaledDy).clamp(0.8, 3.0),
+            userScale: (widget.controller.userScale - scaledDy)
+                .clamp(widget.minScale, widget.maxScale),
           );
         }
       },
@@ -123,7 +130,8 @@ class _DiTreDiDraggableState extends State<DiTreDiDraggable> {
           _lastY = data.localFocalPoint.dy;
 
           controller.update(
-            userScale: _scaleBase * data.scale,
+            userScale: (_scaleBase * data.scale)
+                .clamp(widget.minScale, widget.maxScale),
             rotationX: widget.rotationEnabled
                 ? (controller.rotationX - dy / 2).clamp(-90, -20)
                 : null,
