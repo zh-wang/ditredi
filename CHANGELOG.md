@@ -1,5 +1,9 @@
 ## 0.1.6
 
+* Move scale control to controller.
+
+## 0.1.6
+
 * Min and max scale on draggable widget.
 
 ## 0.1.5

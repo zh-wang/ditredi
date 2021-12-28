@@ -13,6 +13,12 @@ class DiTreDiController extends ChangeNotifier {
   /// User scale. By default it's 1.0.
   double userScale;
 
+  /// Minimum scale applied by user. By default it's 0.8.
+  double minUserScale;
+
+  /// Maximum scale applied by user. By default it's 3.0.
+  double maxUserScale;
+
   /// Camera rotation around X-axis (vertical).
   /// Minus moves camera "above" the model, with plus it's "below".
   double rotationX;
@@ -45,6 +51,8 @@ class DiTreDiController extends ChangeNotifier {
     this.modelScale = 1,
     this.viewScale = 1,
     this.userScale = 1,
+    this.minUserScale = 0.8,
+    this.maxUserScale = 3.0,
     this.rotationX = -45,
     this.rotationY = 45,
     this.rotationZ = 0,
@@ -72,15 +80,16 @@ class DiTreDiController extends ChangeNotifier {
     double? ambientLightStrength,
   }) {
     this.viewScale = viewScale ?? this.viewScale;
-    this.userScale = userScale ?? this.userScale;
+    this.userScale =
+        (userScale ?? this.userScale).clamp(minUserScale, maxUserScale);
     this.rotationX = rotationX ?? this.rotationX;
     this.rotationY = rotationY ?? this.rotationY;
     this.rotationZ = rotationZ ?? this.rotationZ;
     this.translation = translation ?? this.translation;
     this.lightStrength =
-        lightStrength?.clamp(0, double.infinity) ?? this.lightStrength;
+        (lightStrength ?? this.lightStrength).clamp(0, double.infinity);
     this.ambientLightStrength =
-        ambientLightStrength?.clamp(0, 1) ?? this.ambientLightStrength;
+        (ambientLightStrength ?? this.ambientLightStrength).clamp(0, 1);
     if (light != null) {
       light.normalizeInto(this.light);
     }
