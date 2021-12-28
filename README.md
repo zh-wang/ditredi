@@ -225,7 +225,7 @@ Load from a string obj content:
 ```dart
 DiTreDi(
     figures: [
-        Mesh3D(await ObjParser().parse(meshLines));
+        Mesh3D(await ObjParser().parse(meshLines)),
     ],
 )
 ```
@@ -235,7 +235,7 @@ Load from a flutter resource:
 ```dart
 DiTreDi(
     figures: [
-        Mesh3D(await ObjParser().loadFromResources("assets/model.obj"));
+        Mesh3D(await ObjParser().loadFromResources("assets/model.obj")),
     ],
 )
 ```
@@ -245,7 +245,7 @@ Load from a file:
 ```dart
 DiTreDi(
     figures: [
-        Mesh3D(await ObjParser().loadFromFile(Uri.parse("files/model.obj")));
+        Mesh3D(await ObjParser().loadFromFile(Uri.parse("files/model.obj"))),
     ],
 )
 ```
