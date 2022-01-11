@@ -1,10 +1,7 @@
-import 'dart:ui';
-
 import 'package:ditredi/src/controller/ditredi_controller.dart';
 import 'package:ditredi/src/model/ditredi_config.dart';
 import 'package:ditredi/src/model/model_3d.dart';
 import 'package:ditredi/src/painter/canvas_model_painter.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 import 'package:vector_math/vector_math_64.dart';
