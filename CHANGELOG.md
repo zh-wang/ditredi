@@ -1,3 +1,7 @@
+## 0.1.9
+
+* Fix vertex overflow.
+
 ## 0.1.8
 
 * Allow scale constraint updates.

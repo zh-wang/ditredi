@@ -13,6 +13,8 @@ import 'package:vector_math/vector_math_64.dart';
 /// Shouldn't be used directly, use [DiTreDi] instead.
 class CanvasModelPainter extends CustomPainter implements PaintViewPort {
   static const _dimension = 2;
+  static const _maxDepth = 5000.0;
+
   var _isDirty = true;
   final DiTreDiController _controller;
   Aabb3 _bounds = Aabb3();
@@ -205,7 +207,8 @@ class CanvasModelPainter extends CustomPainter implements PaintViewPort {
     return vector.x >= -_viewPortWidth &&
         vector.x <= _viewPortWidth &&
         vector.y >= -_viewPortHeight &&
-        vector.y <= _viewPortHeight;
+        vector.y <= _viewPortHeight &&
+        vector.z <= _maxDepth;
   }
 
   /// Checks if line is visible in the current viewport.
@@ -215,6 +218,7 @@ class CanvasModelPainter extends CustomPainter implements PaintViewPort {
     if (a.x > _viewPortWidth && b.x > _viewPortWidth) return false;
     if (a.y < -_viewPortHeight && b.y < -_viewPortHeight) return false;
     if (a.y > _viewPortHeight && b.y > _viewPortHeight) return false;
+    if (a.z > _maxDepth || b.z > _maxDepth) return false;
     return true;
   }
 
