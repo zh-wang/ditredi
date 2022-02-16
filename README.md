@@ -1,6 +1,6 @@
 ![Splash](test/paint/golden/splash.png)
 
-DiTreDi (D3D)
+DiTreDi (D 3D)
 ===========
 
 A flutter package that displays large 3D datasets on a transparent canvas.
@@ -15,7 +15,7 @@ DiTreDi was created to efficiently display datasets and meshes in 3D space. It w
 
 ## Table of Contents
 
-- [DiTreDi (D3D)](#ditredi-d3d)
+- [DiTreDi (D 3D)](#ditredi-d-3d)
   - [Preface](#preface)
   - [Table of Contents](#table-of-contents)
   - [Getting started](#getting-started)

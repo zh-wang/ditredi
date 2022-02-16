@@ -1,3 +1,7 @@
+## 0.1.10
+
+* Update name.
+
 ## 0.1.9
 
 * Fix vertex overflow.
