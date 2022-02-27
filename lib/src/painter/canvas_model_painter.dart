@@ -134,7 +134,7 @@ class CanvasModelPainter extends CustomPainter implements PaintViewPort {
         _verticesToDraw,
         colors: _colorsToDraw,
       ),
-      BlendMode.src,
+      BlendMode.dst,
       _vPaint,
     );
   }
@@ -172,7 +172,7 @@ class CanvasModelPainter extends CustomPainter implements PaintViewPort {
         _verticesBuffer,
         colors: _colorsBuffer,
       ),
-      BlendMode.src,
+      BlendMode.dst,
       _vPaint,
     );
   }

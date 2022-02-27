@@ -1,3 +1,7 @@
+## 1.0.0
+
+* Fix for flutter 2.10.1 color vertices on the web with canvas renderer.
+
 ## 0.1.10
 
 * Update name.
@@ -16,7 +20,7 @@
 
 ## 0.1.6
 
-* Min and max scale on draggable widget.
+* Min and max scale on the draggable widget.
 
 ## 0.1.5
 
