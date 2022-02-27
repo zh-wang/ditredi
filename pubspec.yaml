@@ -1,6 +1,6 @@
 name: ditredi
 description: A flutter package that displays large 3D datasets on transparent canvas.
-version: 0.1.10
+version: 1.0.0
 homepage: https://gitlab.com/jelenski/ditredi
 
 environment:
