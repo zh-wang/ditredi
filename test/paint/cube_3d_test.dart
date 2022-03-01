@@ -78,6 +78,15 @@ void main() {
       controller: controller,
     ));
   }, width: 1000, height: 400);
+
+  diTreDiDrawTest('cube/large_set_multicolor.png', (tester, controller) async {
+    controller.update(rotationY: 30, rotationX: 0, userScale: 3);
+    await tester.pumpWidget(DiTreDi(
+      figures: [..._generateMultiColorCubes()],
+      config: const DiTreDiConfig(),
+      controller: controller,
+    ));
+  });
 }
 
 Iterable<Cube3D> _generateCubes() sync* {
@@ -91,6 +100,36 @@ Iterable<Cube3D> _generateCubes() sync* {
             y.toDouble() * 1.5,
             z.toDouble() * 1.5,
           ),
+        );
+      }
+    }
+  }
+}
+
+Iterable<Cube3D> _generateMultiColorCubes() sync* {
+  final colors = [
+    m.Colors.white,
+    m.Colors.blue,
+    m.Colors.yellow,
+    m.Colors.red,
+    m.Colors.orange,
+    m.Colors.pink,
+    m.Colors.purple,
+    m.Colors.indigo,
+  ];
+
+  const count = 8;
+  for (var x = count; x > 0; x--) {
+    for (var y = count; y > 0; y--) {
+      for (var z = count; z > 0; z--) {
+        yield Cube3D(
+          0.9,
+          Vector3(
+            x.toDouble() * 2,
+            y.toDouble() * 2,
+            z.toDouble() * 2,
+          ),
+          color: colors[(colors.length - y) % colors.length],
         );
       }
     }

@@ -32,6 +32,29 @@ void main() {
     ));
   });
 
+  diTreDiDrawTest('mesh_3d/torus_multiple_colors.png',
+      (tester, controller) async {
+    final mesh = await _getTorus();
+    final colors = [
+      m.Colors.red,
+      m.Colors.green,
+      m.Colors.blue,
+      m.Colors.orange,
+      m.Colors.amber,
+    ];
+    var index = 0;
+    await tester.pumpWidget(DiTreDi(
+      figures: [
+        mesh.copyWith(
+            faces: mesh.faces
+                .map((e) => e.copyWith(color: colors[index++ % colors.length]))
+                .toList())
+      ],
+      controller: controller,
+      config: const DiTreDiConfig(defaultColorMesh: m.Colors.black),
+    ));
+  });
+
   diTreDiDrawTest('mesh_3d/torus_lines.png', (tester, controller) async {
     final mesh = await _getTorus();
     await tester.pumpWidget(DiTreDi(

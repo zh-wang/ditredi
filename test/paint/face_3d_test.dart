@@ -30,6 +30,30 @@ void main() {
     ], controller: controller));
   });
 
+  diTreDiDrawTest('face_3d/multiple_colors.png', (tester, controller) async {
+    final a = Face3D(
+      Triangle.points(
+        Vector3(0, 0 - 1, 0 - 1),
+        Vector3(0, 0 - 1, 0 + 1),
+        Vector3(0, 0 + 1, 0 + 1),
+      ),
+      color: m.Colors.red,
+    );
+    final b = Face3D(
+      Triangle.points(
+        Vector3(1, 0 - 1, 0 - 1),
+        Vector3(1, 0 - 1, 0 + 1),
+        Vector3(1, 0 + 1, 0 + 1),
+      ),
+      color: m.Colors.red,
+    );
+
+    await tester.pumpWidget(DiTreDi(figures: [
+      a,
+      b.copyWith(color: m.Colors.green),
+    ], controller: controller));
+  });
+
   diTreDiDrawTest('face_3d/lines.png', (tester, controller) async {
     await tester.pumpWidget(DiTreDi(figures: [
       ...Face3D(

@@ -40,6 +40,9 @@ mixin Face3DPainter implements Model3DPainter<Face3D> {
       colors[vertexIndex + 1] = originColor;
       colors[vertexIndex + 2] = originColor;
     } else {
+      colors[vertexIndex + 0] = 0;
+      colors[vertexIndex + 1] = 0;
+      colors[vertexIndex + 2] = 0;
       _t.point0.setZero();
       _t.point1.setZero();
       _t.point2.setZero();
