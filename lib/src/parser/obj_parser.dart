@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ui';
 
 import 'package:ditredi/ditredi.dart';
@@ -10,6 +11,8 @@ import 'package:ditredi/src/parser/file/file_loader.dart'
 
 /// Parser for Wavefront .obj files.
 class ObjParser {
+  final LineSplitter _lineSplitter = const LineSplitter();
+
   /// Material usage tag.
   static const usemtl = "usemtl";
 
@@ -35,11 +38,11 @@ class ObjParser {
     final resourcePath = Uri(path: objResourceName);
     final dirPath =
         resourcePath.pathSegments.take(resourcePath.pathSegments.length - 1);
-    final lines = modelData.split('\n');
+    final lines = _lineSplitter.convert(modelData);
     final materialLib = <String, Map<String, ObjMaterial>>{};
     for (var line in lines) {
       if (line.startsWith(mtllib)) {
-        final libName = line.split(_whiteSpace).last;
+        final libName = line.trim().split(_whiteSpace).last;
         final content = await rootBundle
             .loadString(Uri(pathSegments: [...dirPath, libName]).path)
             .onError((_, __) => "");
@@ -67,7 +70,7 @@ class ObjParser {
     String data, {
     Map<String, Map<String, ObjMaterial>> materialLib = const {},
   }) async {
-    return parseLines(data.split('\n'), materialLib: materialLib);
+    return parseLines(_lineSplitter.convert(data), materialLib: materialLib);
   }
 
   /// Creates a [List] of [Face3D] for given obj [lines] and [materialLib].
@@ -80,7 +83,7 @@ class ObjParser {
     Map<String, ObjMaterial> materials = {};
     ObjMaterial currentMaterial = ObjMaterial.defaultMaterial();
     for (var line in lines) {
-      List<String> chars = line.split(_whiteSpace);
+      List<String> chars = line.trim().split(_whiteSpace);
 
       if (chars[0] == "v") {
         // vertex
@@ -117,10 +120,10 @@ class ObjParser {
 
     if (materialData == null || materialData.isEmpty) return null;
 
-    final lines = materialData.split("\n");
+    final lines = _lineSplitter.convert(materialData);
     String name = '';
     for (var line in lines) {
-      List<String> chars = line.split(_whiteSpace);
+      List<String> chars = line.trim().split(_whiteSpace);
       if (chars[0] == newmtl) {
         name = chars[1];
       }

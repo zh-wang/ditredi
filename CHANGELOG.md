@@ -1,3 +1,7 @@
+## 1.0.1
+
+* Fix obj file parsing on Windows (rf endline issue).
+
 ## 1.0.0
 
 * Fix for flutter 2.10.1 color vertices on the web with canvas renderer.
