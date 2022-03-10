@@ -72,7 +72,7 @@ mixin Face3DPainter implements Model3DPainter<Face3D> {
     final p = (_jnv.dot(controller.light) * controller.lightStrength)
         .clamp(controller.ambientLightStrength, double.infinity);
     return Color.fromARGB(
-      255,
+      color.alpha,
       (color.red.toDouble() * p).round().clamp(0, 255),
       (color.green.toDouble() * p).round().clamp(0, 255),
       (color.blue.toDouble() * p).round().clamp(0, 255),
