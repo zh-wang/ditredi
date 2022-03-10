@@ -88,7 +88,8 @@ void main() {
     ));
   });
 
-  diTreDiDrawTest('cube/large_set_transparency.png', (tester, controller) async {
+  diTreDiDrawTest('cube/large_set_transparency.png',
+      (tester, controller) async {
     controller.update(rotationY: 30, rotationX: 0, userScale: 3);
     await tester.pumpWidget(DiTreDi(
       figures: [..._generateMultiColorCubesWithTransparency()],
