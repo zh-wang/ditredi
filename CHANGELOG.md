@@ -1,3 +1,7 @@
+## 1.0.2
+
+* Use alpha channel for faces.
+
 ## 1.0.1
 
 * Fix obj file parsing on Windows (rf endline issue).
