@@ -1,3 +1,7 @@
+## 1.0.3
+
+* Read alpha channel from mtl file.
+  
 ## 1.0.2
 
 * Use alpha channel for faces.

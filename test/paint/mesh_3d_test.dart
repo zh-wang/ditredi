@@ -135,6 +135,12 @@ void main() {
     await tester.pumpWidget(DiTreDi(figures: [mesh], controller: controller));
   });
 
+  diTreDiDrawTest('mesh_3d/lowpolytree_alpha.png', (tester, controller) async {
+    controller.update(ambientLightStrength: 0.1, lightStrength: 1);
+    final mesh = await _getPolytreeWithAlpha();
+    await tester.pumpWidget(DiTreDi(figures: [mesh], controller: controller));
+  });
+
   diTreDiDrawTest('mesh_3d/lowpolytree_light.png', (tester, controller) async {
     controller.update(
       ambientLightStrength: 0.2,
@@ -154,6 +160,9 @@ Future<Mesh3D> _getTorus() async => _getObjModel("torus.obj");
 Future<Mesh3D> _getTerrain() async => _getObjModel("terrain.obj");
 
 Future<Mesh3D> _getPolytree() async => _getObjModel("lowpolytree.obj");
+
+Future<Mesh3D> _getPolytreeWithAlpha() async =>
+    _getObjModel("lowpolytree-alpha.obj");
 
 Future<List<Point3D>> _getTerrainCsv() async => _getCsv("terrain.csv");
 

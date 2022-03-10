@@ -22,8 +22,9 @@ class ObjParser {
   /// Material tag.
   static const newmtl = "newmtl";
 
-  /// Vertex material tag.
-  static const kd = "Kd";
+  /// Vertex material tagd.
+  static const _kd = "Kd";
+  static const _tr = "Tr";
 
   static final _whiteSpace = RegExp(r"\s+");
 
@@ -122,18 +123,29 @@ class ObjParser {
 
     final lines = _lineSplitter.convert(materialData);
     String name = '';
+    double r = 0, g = 0, b = 0;
     for (var line in lines) {
       List<String> chars = line.trim().split(_whiteSpace);
       if (chars[0] == newmtl) {
         name = chars[1];
       }
-      if (chars[0] == kd) {
-        final r = double.parse(chars[1]);
-        final g = double.parse(chars[2]);
-        final b = double.parse(chars[3]);
+      if (chars[0] == _kd) {
+        r = double.parse(chars[1]);
+        g = double.parse(chars[2]);
+        b = double.parse(chars[3]);
         materials[name] = ObjMaterial(
           color: Color.fromARGB(
             255,
+            (255 * r).toInt(),
+            (255 * g).toInt(),
+            (255 * b).toInt(),
+          ),
+        );
+      } else if (chars[0] == _tr) {
+        final a = double.parse(chars[1]);
+        materials[name] = ObjMaterial(
+          color: Color.fromARGB(
+            (255 * a).toInt(),
             (255 * r).toInt(),
             (255 * g).toInt(),
             (255 * b).toInt(),
