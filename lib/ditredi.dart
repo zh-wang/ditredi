@@ -33,10 +33,15 @@ class DiTreDi extends StatelessWidget {
   /// The controller to controll the camera.
   final DiTreDiController controller;
 
+  /// Layer's indice of figures.
+  /// Layer with bigger index will be rendered later.
+  final List<int> layers;
+
   /// Creates a [DiTreDi] widget.
   DiTreDi({
     Key? key,
     required this.figures,
+    required this.layers,
     DiTreDiController? controller,
     this.config = const DiTreDiConfig(),
     this.bounds,
@@ -50,6 +55,7 @@ class DiTreDi extends StatelessWidget {
         size: Size.infinite,
         painter: CanvasModelPainter(
           figures,
+          layers,
           bounds,
           controller,
           config,
