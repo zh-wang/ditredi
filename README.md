@@ -1,5 +1,11 @@
 ![Splash](test/paint/golden/splash.png)
 
+## ****** Important ******
+
+- Original project can be found [ditredi](https://pub.dev/packages/ditredi).
+- Add layers and sort z-index by figures, to fix rendering problems when two figures are close enough to each other.
+- Rendering priority from high to low would be layers, figure's z-index, and face's z-index in each figure.
+
 DiTreDi (D 3D)
 ===========
 
