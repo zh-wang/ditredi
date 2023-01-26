@@ -28,14 +28,19 @@ class CanvasModelPainter extends CustomPainter implements PaintViewPort {
   var _verticesToDraw = Float32List(0);
   var _verticesBuffer = Float32List(0);
   var _zIndex = Float32List(0);
+  var _zIndexUnit = Float32List(0);
+  var _layerIndex = Int32List(0);
   late PriorityQueue _priorityQueue;
 
   final Paint _vPaint = Paint()..isAntiAlias = true;
   final DiTreDiConfig _config;
 
+  final List<int> _layers;
+
   /// Creates a [CanvasModelPainter].
   CanvasModelPainter(
     this._figures,
+    this._layers,
     Aabb3? bounds,
     this._controller,
     this._config,
@@ -50,12 +55,18 @@ class CanvasModelPainter extends CustomPainter implements PaintViewPort {
     _verticesToDraw = Float32List(verticesCount * _dimension);
     _colorsToDraw = Int32List(verticesCount);
     _zIndex = Float32List(verticesCount ~/ 3);
+    _zIndexUnit = Float32List(verticesCount ~/ 3);
+    _layerIndex = Int32List(verticesCount ~/ 3);
 
     if (_config.supportZIndex) {
       _verticesBuffer = Float32List(verticesCount * _dimension);
       _colorsBuffer = Int32List(verticesCount);
       _priorityQueue = PriorityQueue((a, b) {
-        return _zIndex[a].compareTo(_zIndex[b]);
+        var layerRet = _layerIndex[a].compareTo(_layerIndex[b]);
+        var unitRet = _zIndexUnit[a].compareTo(_zIndexUnit[b]);
+        return layerRet == 0
+            ? unitRet == 0 ? _zIndex[a].compareTo(_zIndex[b]) : unitRet
+            : layerRet;
       });
     }
   }
@@ -115,7 +126,22 @@ class CanvasModelPainter extends CustomPainter implements PaintViewPort {
         _colorsToDraw,
         _verticesToDraw,
       );
-      vertexIndex += figure.verticesCount();
+
+      var verticesCount = figure.verticesCount();
+      var zIndexOfFigure = 0.0;
+      for (var j = 0; j < verticesCount ~/ 3; ++j) {
+        var u = vertexIndex ~/ 3 + j;
+        // _zIndexUnit[u] = unit + ;
+        zIndexOfFigure += _zIndex[u];
+        _layerIndex[u] = _layers[i];
+      }
+
+      for (var j = 0; j < verticesCount ~/ 3; ++j) {
+        var u = vertexIndex ~/ 3 + j;
+        _zIndexUnit[u] = zIndexOfFigure;
+      }
+
+      vertexIndex += verticesCount;
     }
 
     if (_config.supportZIndex) {
