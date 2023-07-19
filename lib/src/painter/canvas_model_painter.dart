@@ -192,6 +192,7 @@ class CanvasModelPainter extends CustomPainter implements PaintViewPort {
       colorCounter += 3;
     }
 
+    if (_verticesBuffer.isEmpty) return;
     canvas.drawVertices(
       Vertices.raw(
         VertexMode.triangles,

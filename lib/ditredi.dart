@@ -41,10 +41,10 @@ class DiTreDi extends StatelessWidget {
   DiTreDi({
     Key? key,
     required this.figures,
-    required this.layers,
     DiTreDiController? controller,
     this.config = const DiTreDiConfig(),
     this.bounds,
+    this.layers = const [],
   })  : controller = controller ?? DiTreDiController(),
         super(key: key);
 
